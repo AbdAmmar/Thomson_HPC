@@ -12,6 +12,13 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
   ```sh
   sudo apt-get install liblapack-dev libopenblas-dev libomp-dev
   ```
+* for animation (gnuplot, FFmpeg):
+
+  ```sh
+  sudo apt-get install gnuplot ffmpeg
+  ```
+  
+  
 # Build
 
 * build the program
