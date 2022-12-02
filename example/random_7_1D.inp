@@ -1,0 +1,18 @@
+dimension: 1
+electron:     7
+tolerance:   0.10E-07
+itermax:      10000
+box:  6.2831853071795862  6.2831853071795862  6.2831853071795862
+periodic
+random
+multiply
+show
+animation
+geometry
+    1      0.50836909
+    2      0.73463613
+    3      0.10820377
+    4      0.58766145
+    5      0.15694642
+    6      0.03722030
+    7      0.44300854
