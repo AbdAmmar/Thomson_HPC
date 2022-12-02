@@ -29,6 +29,25 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
 
 # Run 
 
+* the input file generator
+
+  ```sh
+  ./ING "The input file name"
+  ```
+* thomson
+
   ```sh
   ./Thomson "The input file name"
   ```
+  
+* there are some example of the inputfile in the example folder you can use anyone of them or make your input
+  
+  
+<!-- CONTACT -->
+## Contact
+
+Stefano Evangelisti - stefano.lcpq@gmail.com
+
+Amer Alrakik - alrakikamer@gmail.com
+
+Project Link: [https://github.com/ALRAKIK/Thomson](https://github.com/ALRAKIK/Thomson)
