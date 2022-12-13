@@ -49,13 +49,6 @@ module read_f_f
 	END DO
 	1 CLOSE (1)
 	
-	OPEN (8, file ="INPUT_EQUILIBRUIM_DISTANCE.test")
-	DO
-    READ (8,*, END=2)
-    nnlines = nnlines + 1
-	END DO
-	2 CLOSE (8)
-	
 	open (3,file = arg)
 	do i=1,nlines
 	read (3,*,end=3) dima
@@ -255,6 +248,14 @@ module read_f_f
 	
 	
 	if (hara == "harmonic") then
+    
+    OPEN (8, file ="INPUT_EQUILIBRUIM_DISTANCE.test")
+	DO
+    READ (8,*, END=2)
+    nnlines = nnlines + 1
+	END DO
+	2 CLOSE (8)
+    
 	open (7,file = "INPUT_EQUILIBRUIM_DISTANCE.test")
 	do i=1,nnlines
 	read (7,*,end=18) equaa

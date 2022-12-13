@@ -15,7 +15,7 @@ module Thomson_problem
 	E=0.d0
 
 	if (D == 3) then 
-    !!$omp parallel do collapse(2)
+   
 	do i = 1,N
 		do j=1,N
 		if (j > i) then
@@ -23,11 +23,11 @@ module Thomson_problem
 		end if 
 		end do
 	end do 
-	!!$omp end parallel do 
+	 
 	end if 
 
 	if (D == 2) then 
-    !!$omp parallel do collapse(2)
+    
 	do i = 1,N
 		do j=1,N
 		if (j > i) then
@@ -35,11 +35,11 @@ module Thomson_problem
 		end if 
 		end do
 	end do 
-    !!$omp end parallel do 
+     
 	end if 
 
 	if (D == 1) then 
-    !!$omp parallel do collapse(2)
+    
 	do i = 1,N
 		do j=1,N
 		if (j > i) then
@@ -47,7 +47,7 @@ module Thomson_problem
 		end if 
 		end do
 	end do 
-    !!$omp end parallel do 
+    
 	end if 
 	
 	endsubroutine
@@ -68,7 +68,7 @@ module Thomson_problem
 	tdf=0.d0 
 		
 	if ( D == 3 ) then 
-    !!$omp parallel do collapse(2)
+
 	do i=1,N
 		do j=1,N
 			if (j /= i) then
@@ -76,9 +76,7 @@ module Thomson_problem
 			end if 
 		end do
 	end do
-	!!$omp end parallel do
-    
-    !!$omp parallel do collapse(2)
+
 	do i=N+1,2*N
 		do j=N+1,2*N
 			if (j /= i) then
@@ -86,9 +84,7 @@ module Thomson_problem
 			end if 
 		end do
 	end do
-	!!$omp end parallel do
-    
-    !!$omp parallel do collapse(2)
+
 	do i=2*N+1,3*N
 		do j=2*N+1,3*N
 			if (j /= i) then
@@ -96,7 +92,7 @@ module Thomson_problem
 			end if 
 		end do
 	end do
-    !!$omp end parallel do
+    
 	tdf = sum(df,2)
 	end if 
 
@@ -157,7 +153,6 @@ module Thomson_problem
 
 	!! calculate the diagonal
     
-    !!$omp parallel do collapse(2)
 
 	do i=1,3*N
 		do j=1,3*N
@@ -171,11 +166,9 @@ module Thomson_problem
 		end do
 	end do
     
-    !!$omp end parallel do
     
 	!! calculate R(x) !!
 
-    !!$omp parallel do collapse(2)
 
 	do i = 1,N
 		do j = 1,N
@@ -185,13 +178,8 @@ module Thomson_problem
 		end do 
 	end do
 	
-    !!$omp end parallel do
-    
-    
-    
 	!! calculate R(y) !!
     
-    !!$omp parallel do collapse(2)
     
 	do i = 1,N
 		do j = 1,N
@@ -201,11 +189,11 @@ module Thomson_problem
 		end do 
 	end do
     
-    !!$omp end parallel do
+
 
 	!! calculate R(z) !!
     
-    !!$omp parallel do collapse(2)
+
     
 	do i = 1,N
 		do j = 1,N
@@ -215,11 +203,11 @@ module Thomson_problem
 		end do 
 	end do
 	
-    !!$omp end parallel do
+
     
 	!! calculate Rxy !!
     
-    !!$omp parallel do collapse(2)
+
     
 	do i = 1,N
 		do j = 1,N
