@@ -741,7 +741,9 @@ open(2,file='data.out',status = 'replace')
 	write(2,'(a,I15)') 'itermax:' , itermax
 	write(2,'(a,E20.4)') 'tolerance:' , tol
 	write(2,'(a,f30.16,f30.16,f30.16)') 'box:' , LLx , LLy , LLz
+    if (showa == "show") then 
 	write(2,'(a)') 'show'
+    end if 
 	if (pera == "periodic") then
 	write(2,'(a)') 'periodic'
 	end if 
@@ -751,11 +753,11 @@ open(2,file='data.out',status = 'replace')
 	write(2,'(a)') 'geometry'
 	DO i = 1, N 
 	if (space == 1) then 
-		write(2,'(I5,f24.16,a)') Nu(i) , X_pos(i, :) , "		nf"
+		write(2,'(I5,f24.16,a)') Nu(i) , X_pos(i, :) 
 	elseif (space == 2) then 
-	    write(2,'(I5,f24.16,f24.16,a)') Nu(i) , X_pos(i, :) , "		nf"
+	    write(2,'(I5,f24.16,f24.16,a)') Nu(i) , X_pos(i, :) 
 	elseif (space == 3) then 
-	    write(2,'(I5,f24.16,f24.16,f24.16,a)') Nu(i) , X_pos(i, :) , "		nf"
+	    write(2,'(I5,f24.16,f24.16,f24.16,a)') Nu(i) , X_pos(i, :) 
 	end if 
 	end do
 close(2)
@@ -869,12 +871,14 @@ close(9)
 end if 
 call system('gnuplot plot')
 call system('rm -rf plot')
-!call system('rm -rf data_frame.dat')
+call system('rm -rf data_frame.dat')
 call system('rm -rf energy.dat')
 end if 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 call system('rm -rf fort.7')
 call system('rm -rf fort.3')
+call system('rm -rf fort.4')
+call system('rm -rf fort.8')
 call system('rm -rf functions.mod')
 end program 

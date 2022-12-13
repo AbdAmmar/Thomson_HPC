@@ -4,10 +4,11 @@ contains
 
 subroutine noanswer
 character (len=200) :: answer 
-integer :: d , M , i 
+integer :: d , M , i , du
 real*8  :: r 
 real*16, parameter :: pi = ACOS(-1.0d0)
 real*16 :: LLx, LLy , LLz
+real, allocatable :: x(:),y(:),z(:)
 
 do while (.true.)
         write(*,'(a)') "----------------------------------------------"
@@ -24,6 +25,7 @@ do while (.true.)
         end do
 
         write(1,'(a,I1)') "dimension: " , d
+        du = d 
         write(*,'(a)') "----------------------------------------------"
         write(*,'(a)') "Number of electrons ? (write any number)"
         write(*,'(a)') "----------------------------------------------"
@@ -94,10 +96,10 @@ do while (.true.)
         write(*,'(a)') "Multiply the geometry by the size of the box ? (Y/N)"
         write(*,'(a)') "----------------------------------------------"
         read(*,*) answer
-            if (answer == "y" .or. answer == "Y") then
+            if (answer == "y" .or. answer == "Y") then  
             write(1,'(a)') "multiply"
                 exit
-            elseif (answer == "n" .or. answer == "N") then 
+            elseif (answer == "n" .or. answer == "N") then
                 exit
             else
             write(*,'(a)') "----------------------------------------------"
@@ -159,14 +161,36 @@ do while (.true.)
         end do
         
         write(1,'(a)') "geometry"
-        do i = 1 , M
-        write(1,'(I5,3(1x,f16.8),a)') i , 0.d0 , 0.d0 , 0.d0 , "		nf"
-        end do 
-        write(*,'(a)') "----------------------------------------------"
-        write(*,'(a)') "*****    Now you have your input file with coordinations"
-        write(*,'(a)') "*****    Please open the input file and add you geometry"
-        write(*,'(a)') "*****    Don't forget to add nf (not fixed) or f (fixed)"
-        write(*,'(a)') "         after the coordinations"
+        
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        allocate(x(M))
+        allocate(y(M))
+        allocate(z(M))
+        
+        
+        call random_number(x)
+        call random_number(y)
+        call random_number(z)
+        
+        
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (du == 3) then 
+            do i = 1 , M
+                write(1,'(I5,f16.8,f16.8,f16.8)') i , x(i) , y(i) , z(i) 
+            end do 
+        else if (du == 2) then 
+            do i = 1 , M
+                write(1,'(I5,f16.8,f16.8)') i , x(i) , y(i)
+            end do
+        else 
+            do i = 1 , M
+                write(1,'(I5,f16.8)') i , x(i) 
+            end do
+        end if 
+        write(*,'(a)') "----------------------------------------------------------"
+        write(*,'(a)') "***    Now you have your input file with coordinations"
+        write(*,'(a)') "***    Please open the input file and modifiy your geometry"
+        write(*,'(a)') "----------------------------------------------------------"
 end subroutine
 
 subroutine yesanswer
@@ -197,7 +221,8 @@ select case(answer)
     
     case("FCC","fcc") 
         write(*,'(a)') "----------------------------------------------"
-        write(*,'(a)') "Number of unit-cell per dimension ? (write a number)"
+        write(*,'(a)') "Number of unit-cell per dimension ? (write a number) 4*n^3"
+        write(*,'(a)') "----------------------------------------------"
         read(*,*) n 
         write(*,'(a)') "----------------------------------------------"
         write(*,'(a,I5)') "The Total number of electron in this case is " , 4*n**3
@@ -308,7 +333,7 @@ select case(answer)
                 do j = 0 , n-1
                     do k = 0 , n-1
                                 icont=icont+1
-                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i  ,d*j , d*k , "    nf"
+                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i  ,d*j , d*k 
                     end do		
                 end do 
             end do
@@ -317,7 +342,7 @@ select case(answer)
                 do j = 0 , n-1
                     do k = 0 , n-1
                                 icont=icont+1
-                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i+d2  ,d*j+d2 , d*k , "    nf"
+                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i+d2  ,d*j+d2 , d*k 
                     end do		
                 end do 
             end do
@@ -327,7 +352,7 @@ select case(answer)
                 do j = 0 , n-1
                     do k = 0 , n-1
                                 icont=icont+1
-                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i  ,d*j+d2 , d*k+d2 , "    nf"
+                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i  ,d*j+d2 , d*k+d2  
                     end do		
                 end do 
             end do
@@ -336,7 +361,7 @@ select case(answer)
                 do j = 0 , n-1
                     do k = 0 , n-1
                                 icont=icont+1
-                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i+d2  ,d*j , d*k+d2 , "    nf"
+                                                write(1,'(i5,3(2x,f20.18),a)') icont, d*i+d2  ,d*j , d*k+d2  
                     end do		
                 end do 
             end do
@@ -344,7 +369,8 @@ select case(answer)
     
     case("BCC","bcc")
         write(*,'(a)') "----------------------------------------------"
-        write(*,'(a)') "Number of unit-cell per dimension ? (write a number)"
+        write(*,'(a)') "Number of unit-cell per dimension ? (write a number) 2*n^3"
+        write(*,'(a)') "----------------------------------------------"
         read(*,*) n 
         write(*,'(a)') "----------------------------------------------"
         write(*,'(a,I5)') "The Total number of electron in this case is " , 2*n**3
@@ -460,7 +486,7 @@ select case(answer)
              do j=0,n-1
                 do k=0,n-1
                    icont=icont+1
-                   write (1,'(i5,3(2x,f20.18),a)') icont, d*i, d*j, d*k , "    nf"
+                   write (1,'(i5,3(2x,f20.18),a)') icont, d*i, d*j, d*k 
                 enddo
              enddo
           enddo
@@ -468,7 +494,7 @@ select case(answer)
              do j=0,n-1
                 do k=0,n-1
                    icont=icont+1
-                   write (1,'(i5,3(2x,f20.18),a)') icont, d*i+d2, d*j+d2, d*k+d2 , "    nf"
+                   write (1,'(i5,3(2x,f20.18),a)') icont, d*i+d2, d*j+d2, d*k+d2 
                 enddo
              enddo
           enddo
@@ -478,7 +504,8 @@ select case(answer)
     
         case("SC", "sc")
         write(*,'(a)') "----------------------------------------------"
-        write(*,'(a)') "Number of unit-cell per dimension ? (write a number)"
+        write(*,'(a)') "Number of unit-cell per dimension ? (write a number) n^3"
+        write(*,'(a)') "----------------------------------------------"
         read(*,*) n 
         write(*,'(a)') "----------------------------------------------"
         write(*,'(a,I5)') "The Total number of electron in this case is " , n**3
@@ -587,7 +614,7 @@ select case(answer)
                 do j = 0 , n-1
                     do k = 0 , n-1
                                 icont=icont+1
-                                                write(1,'(i3,3(2x,f16.12),a)') icont, d*i  ,d*j , d*k , "    nf"
+                                                write(1,'(i3,3(2x,f16.12),a)') icont, d*i  ,d*j , d*k 
                     end do		
                 end do 
             end do
@@ -597,7 +624,8 @@ select case(answer)
     case("SL","sl")
     
         write(*,'(a)') "----------------------------------------------"
-        write(*,'(a)') "Number of electron per dimension ? (write a number)"
+        write(*,'(a)') "Number of electron per dimension ? (write a number) n^2"
+        write(*,'(a)') "----------------------------------------------"
         read(*,*) n 
         write(*,'(a)') "----------------------------------------------"
         write(*,'(a,I5)') "The Total number of electron in this case is " , n**2
@@ -704,14 +732,15 @@ select case(answer)
         do i=0,n-1
         do j=0,n-1
             icont=icont+1
-                write (1,'(i3,2(2x,f16.12),a)') icont, d*i , d*j , "		nf"
+                write (1,'(i3,2(2x,f16.12),a)') icont, d*i , d*j 
         end do 
         enddo
         exit    
     
     case("HEX", "hex")
         write(*,'(a)') "----------------------------------------------"
-        write(*,'(a)') "Number of electron on one dimension? (write a number)"
+        write(*,'(a)') "Number of electron on one dimension? (write a number) 4*n^2"
+        write(*,'(a)') "----------------------------------------------"
         read(*,*) n 
         write(*,'(a)') "----------------------------------------------"
         write(*,'(a,I5)') "The Total number of electron in this case is " , 4*n**2
@@ -822,14 +851,14 @@ select case(answer)
             ipoint=ipoint+1
             x(ipoint)=real(ix,8)*dx
             y(ipoint)=real(2*iy,8)*dy
-            write (1,'(i3,f20.16,f20.16,a)') ipoint,x(ipoint), y(ipoint) , "		nf"
+            write (1,'(i3,f20.16,f20.16,a)') ipoint,x(ipoint), y(ipoint) 
          enddo
 
          do ix=0,2*n-1
             ipoint=ipoint+1
             x(ipoint)=(real(ix,8)+0.5d0)*dx
             y(ipoint)=real(2*iy+1,8)*dy
-            write (1,'(i3,f20.16,f20.16,a)') ipoint,x(ipoint), y(ipoint) ,  "		nf"
+            write (1,'(i3,f20.16,f20.16,a)') ipoint,x(ipoint), y(ipoint) 
          enddo
       enddo
     
@@ -838,7 +867,8 @@ select case(answer)
     
     case("ED", "ed")
         write(*,'(a)') "----------------------------------------------"
-        write(*,'(a)') "Number of electrons? (write a number)"
+        write(*,'(a)') "Number of electrons? (write a number) n "
+        write(*,'(a)') "----------------------------------------------"
         read(*,*) n 
         write(*,'(a)') "----------------------------------------------"
         write(*,'(a,I5)') "The Total number of electron in this case is " , n
@@ -942,7 +972,7 @@ select case(answer)
         icont= 0 
         do i = 1, n
         icont=icont+1
-         write (1,'(i4,(2x,f20.18),a)') icont, d*i , "    nf"
+         write (1,'(i4,(2x,f20.18),a)') icont, d*i 
         end do
     
     exit
