@@ -46,7 +46,7 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
 * Using Python code
 
   ```sh
-  python Thomson.py
+   python Thomson.py
   ``` 
 * Thomson
 
