@@ -1,6 +1,8 @@
 # Thomson
 Thomson is program to solve thomson problem in torus in one,two and three dimension based on FORTAN90
 
+![Screenshot](GUI.png)
+
 # Prerequisite
 * compiler (gfortran recommended):
 
