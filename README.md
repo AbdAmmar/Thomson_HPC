@@ -43,6 +43,11 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
   ```sh
   ./ING "The input file name"
   ```
+* using python code
+
+```sh
+  python Thomson.py
+  ``` 
 * thomson
 
   ```sh
