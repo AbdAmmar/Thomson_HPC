@@ -38,17 +38,17 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
 
 # Run 
 
-* the input file generator
+* The input file generator (CLI)
 
   ```sh
   ./ING "The input file name"
   ```
-* using python code
+* Using Python code
 
-```sh
+  ```sh
   python Thomson.py
   ``` 
-* thomson
+* Thomson
 
   ```sh
   ./Thomson "The input file name"
