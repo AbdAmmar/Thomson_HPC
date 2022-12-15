@@ -20,12 +20,10 @@ class App(customtkinter.CTk):
         self.title("Thomson Input generator")
         self.minsize(1020, 760)
 
-        self.grid_rowconfigure(0, weight=1)
-        #self.grid_columnconfigure((0,1), weight=1)
-        #self.grid_columnconfigure(1, weight=3)
+        #self.grid_rowconfigure(0, weight=1)
 
         self.textbox = customtkinter.CTkTextbox(master=self , width = 500)
-        self.textbox.grid(row=0, column=1, padx=20, pady=(20, 20) , sticky="ns")
+        self.textbox.grid(row=0, column=1, padx=20, pady=(40, 20) , sticky="ns")
         self.textbox.configure(state='disabled')
         
         self.tabview=customtkinter.CTkTabview(master=self)
@@ -374,25 +372,25 @@ class App(customtkinter.CTk):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(d1*i) + "\t" + str(d1*j) + "\t" + str(d1*k) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k,10)) + "\n")
                         
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(d1*i+d2) + "\t" + str(d1*j+d2) + "\t" + str(d1*k) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,10)) + "\t \t" + str(round(d1*j+d2,10)) + "\t \t" + str(round(d1*k,10)) + "\n")
             
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(d1*i) + "\t" + str(d1*j+d2) + "\t" + str(d1*k+d2) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j+d2,10)) + "\t \t" + str(round(d1*k+d2,10)) + "\n")
                         
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(d1*i+d2) + "\t" + str(d1*j) + "\t" + str(d1*k+d2) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k+d2,10)) + "\n")
                         
                         
                         
@@ -408,13 +406,13 @@ class App(customtkinter.CTk):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(d1*i) + "\t" + str(d1*j) + "\t" + str(d1*k) + "\n") 
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k,10)) + "\n") 
             
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(d1*i+d2) + "\t" + str(d1*j+d2) + "\t" + str(d1*k+d2) + "\n")               
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,10)) + "\t \t" + str(round(d1*j+d2,10)) + "\t \t" + str(round(d1*k+d2,10)) + "\n")               
         
             
         if self.combobox_CS.get() == "SC (3D)":
@@ -428,7 +426,7 @@ class App(customtkinter.CTk):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(d1*i) + "\t" + str(d1*j) + "\t" + str(d1*k) + "\n") 
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k,10)) + "\n") 
         
         if self.combobox_CS.get() == "SL (2D)":
             d1 = 1/int(self.electron_N_EN.get("0.0", "end"))
@@ -440,7 +438,7 @@ class App(customtkinter.CTk):
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(d1*i) + "\t" + str(d1*j) + "\t" + "\n") 
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t \t" + str(round(d1*j,10)) + "\t" + "\n") 
                     
         if self.combobox_CS.get() == "HEX (2D)":
             dx = pi/int(self.electron_N_EN.get("0.0", "end"))
@@ -451,11 +449,11 @@ class App(customtkinter.CTk):
                 
                 for i in range(2*int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(dx*i) + "\t" + str(2*dy*j) + "\t" + "\n") 
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,10)) + "\t \t \t" + str(round(2*dy*j,10)) + "\t" + "\n") 
                 
                 for i in range(2*int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(dx*(i+0.5)) + "\t" + str((2*j+1)*dy) + "\t" + "\n")
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round((dx*(i+0.5)),10)) + "\t \t \t" + str(round(((2*j+1)*dy),10)) + "\t" + "\n")
                                        
         
         if self.combobox_CS.get() == "ED (1D)":
@@ -464,7 +462,7 @@ class App(customtkinter.CTk):
             self.textbox.insert("insert","geometry" + "\n") 
             for i in range(1,int(self.electron_N_EN.get("0.0", "end"))+1):
                 icount += 1
-                self.textbox.insert("insert", str(icount) + "\t" + str(dx*i)+ "\n") 
+                self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,10))+ "\n") 
         
         
         

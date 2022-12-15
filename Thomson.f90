@@ -807,7 +807,7 @@ open(9,file='plot',status = 'replace')
 		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 9.5,6,7 center font ',22'"
 		write(9,'(a,I4,a,I4,a,I4,a)') "splot for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)):(column(",2*N,"+j)) every ::i::i w p pt 7 ps 3 notitle"
 	else if (space == 2) then 
-		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 7.5,6,7 center font ',22'"
+		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 7.5,6,7 right font ',22'"
 		write(9,'(a,I4,a,I4,a)') "p for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)) every ::i::i w p pt 7 ps 3 notitle"
 	else if (space == 1 ) then 
 		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 7.5,6,7 center font ',22'"
@@ -871,8 +871,8 @@ close(9)
 end if 
 call system('gnuplot plot')
 call system('rm -rf plot')
-call system('rm -rf data_frame.dat')
-call system('rm -rf energy.dat')
+!call system('rm -rf data_frame.dat')
+!call system('rm -rf energy.dat')
 end if 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
