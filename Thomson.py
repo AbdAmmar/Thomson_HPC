@@ -16,9 +16,9 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.geometry("1020x760")
+        self.geometry("1040x820")
         self.title("Thomson Input generator")
-        self.minsize(1020, 760)
+        self.minsize(1040, 820)
 
         #self.grid_rowconfigure(0, weight=1)
 
