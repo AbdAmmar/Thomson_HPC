@@ -62,7 +62,7 @@ coor=space*N
 
 !!!!!!!!!      The title of the program            !!!!!!
 
-write(*,'(a)') "   _____ _                                                       _     _                 "
+write(*,'(a)') "   _____ _                                                       _     _ "
 write(*,'(a)') "  |_   _| |                                                     | |   | |"
 write(*,'(a)') "    | | | |__   ___  _ __ ___  ___  ___  _ __    _ __  _ __ ___ | |__ | | ___ _ __ ___"
 write(*,'(a)') "    | | | '_ \ / _ \| '_ ` _ \/ __|/ _ \| '_ \  | '_ \| '__/ _ \| '_ \| |/ _ \ '_ ` _ \"
@@ -707,7 +707,7 @@ end if
 
 
 if (distancea == 'distance') then 
-    call prin_distance(X,N,space,X_distance)
+    call prin_distance(X,N,space,X_distance,lx,ly,lz)
 end if 
 
 
@@ -804,13 +804,13 @@ open(9,file='plot',status = 'replace')
 	write(9,'(a)') 'set output "tmp/image.".i.".png"'
 	write(9,'(a)') "x = getValue(i,1,'energy.dat')"
 	if (space == 3) then 
-		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 9.5,6,7 center font ',22'"
+		write(9,'(a)') "set label sprintf('Energy = %16.12f', x*1.0) at 9.5,6,7 center font ',18'"
 		write(9,'(a,I4,a,I4,a,I4,a)') "splot for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)):(column(",2*N,"+j)) every ::i::i w p pt 7 ps 3 notitle"
 	else if (space == 2) then 
-		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 7.5,6,7 right font ',22'"
+		write(9,'(a)') "set label sprintf('Energy = %16.12f', x*1.0) at 7.5,6,7 center font ',18'"
 		write(9,'(a,I4,a,I4,a)') "p for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)) every ::i::i w p pt 7 ps 3 notitle"
 	else if (space == 1 ) then 
-		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 7.5,6,7 center font ',22'"
+		write(9,'(a)') "set label sprintf('Energy = %16.12f', x*1.0) at 7.5,6,7 center font ',18'"
 		write(9,'(a,I4,a,I4,a)') "p for [j=1:",N,"] 'data_frame.dat' u j:(0) every ::i::i w p pt 7 ps 3 notitle"
 	end if 
 	write(9,'(a)') "clear"
@@ -858,21 +858,21 @@ open(9,file='plot',status = 'replace')
 	write(9,'(a)') "getValue(row,col,filename) = system('awk ''{if (NR == '.row.') print $'.col.'}'' '.filename.'')"
 	write(9,'(a)') "x = getValue(1,1,'energy.dat')"
 	if (space == 3) then 
-		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 9.5,6,7 center font ',22'"
+		write(9,'(a)') "set label sprintf('Energy = %16.12f', x*1.0) at 9.5,6,7 center font ',18'"
 		write(9,'(a,I4,a,I4,a,I4,a)') "splot for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)):(column(",2*N,"+j)) w p pt 7 ps 3 notitle"
 	else if (space == 2) then 
-		write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 7.5,6,7 center font ',22'"
+		write(9,'(a)') "set label sprintf('Energy = %16.12f', x*1.0) at 7.5,6,7 center font ',18'"
 		write(9,'(a,I4,a,I4,a,I4,a)') "plot for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)) w p pt 7 ps 3 notitle"
 	else if (space == 1 ) then 
-	    write(9,'(a)') "set label sprintf('Energy = %16.14f', x*1.0) at 7.5,6,7 center font ',22'"
+	    write(9,'(a)') "set label sprintf('Energy = %16.12f', x*1.0) at 7.5,6,7 center font ',18'"
 		write(9,'(a,I4,a,I4,a,I4,a)') "plot for [j=1:",N,"] 'data_frame.dat' u j:(0) w p pt 7 ps 3 notitle"
 	end if 
 close(9)
 end if 
 call system('gnuplot plot')
 call system('rm -rf plot')
-!call system('rm -rf data_frame.dat')
-!call system('rm -rf energy.dat')
+call system('rm -rf data_frame.dat')
+call system('rm -rf energy.dat')
 end if 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
