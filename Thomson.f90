@@ -209,7 +209,7 @@ end if
 
 !!!!!!!!!!!!!!!! print the geometry  !!!!!!!!!!!!!!!!!!!
 write(*,'(a)') "The geometry before the Optimization"
-call prin(N,X,Space,X_pos)
+call prin(N,X,Space,X_pos,LLx,LLy,LLz)
 
 
 !!!  get the geodesic distance   !!!
@@ -523,10 +523,10 @@ if (pera == "periodic") then
 	
 	if (space == 1 ) then 
 	do i = 1,size(X)
-	do while (X(i,1) < 0 )
+	do while (X(i,1) < -0.5d0 * LLx )
 		X(i,1) = X(i,1) + LLx
 	end do 
-	do while (X(i,1) > LLx)
+	do while (X(i,1) >= 0.5d0 * LLx)
 			X(i,1) = X(i,1) - LLx 
 	end do
 	if (X(i,1) == 0) then
@@ -536,10 +536,10 @@ if (pera == "periodic") then
 
 	else if (space == 2) then 
 	do i = 1,(size(X)/2)
-	do while (X(i,1) < 0 )
+	do while (X(i,1) < -0.5d0 * LLx )
 	X(i,1) = X(i,1) + LLx
 	end do 
-	do while (X(i,1) > LLx)
+	do while (X(i,1) > 0.5d0 * LLx)
 			X(i,1) = X(i,1) - LLx 
 	end do
 	if (X(i,1) == 0) then
@@ -548,10 +548,10 @@ if (pera == "periodic") then
 	end do
 
 	do i = (size(X)/2)+1,size(X)
-	do while (X(i,1) < 0 )
-	X(i,1) = X(i,1) + LLy
+	do while (X(i,1) < -0.5d0 *LLy )
+		X(i,1) = X(i,1) + LLy
 	end do 
-	do while (X(i,1) > LLy)
+	do while (X(i,1) >= 0.5d0*LLy)
 			X(i,1) = X(i,1) - LLy
 	end do
 	if (X(i,1) == 0) then
@@ -563,35 +563,26 @@ if (pera == "periodic") then
 
 	do i=1,3*N
 	if (i <= N ) then 
-	do while (X(i,1) < 0 )
+	do while (X(i,1) < -0.5d0 * LLx )
 	X(i,1) = X(i,1) + LLx
 	end do 
-	do while (X(i,1) > LLx)
+	do while (X(i,1) >= 0.5d0 * LLx)
 		X(i,1) = X(i,1) - LLx 
-	end do
-	if (X(i,1) == 0) then
-	X(i,1)=X(i,1)
-	end if 
+	end do 
 	else if (i > N .and. i <= 2*N) then
-	do while (X(i,1) < 0 )
+	do while (X(i,1) < -0.5d0 * LLy )
 	X(i,1) = X(i,1) + LLy
 	end do 
-	do while (X(i,1) > LLy)
+	do while (X(i,1) >= 0.5d0*LLy)
 		X(i,1) = X(i,1) - LLy
 	end do
-	if (X(i,1) == 0) then
-	X(i,1)=X(i,1)
-	end if 
     else 
-	do while (X(i,1) < 0 )
+	do while (X(i,1) < -0.5d0 * LLz )
 	X(i,1) = X(i,1) + LLz
 	end do 
-	do while (X(i,1) > LLz)
+	do while (X(i,1) >= 0.5d0 * LLz)
 		X(i,1) = X(i,1) - LLz
-	end do
-	if (X(i,1) == 0) then
-	X(i,1)=X(i,1)
-	end if 
+	end do 
 	end if 
 	end do 
 	end if
@@ -602,7 +593,7 @@ end if
 if (showa == "show") then
 write(*,'(a)') ""
 write(*,'(a)') "The geometry after the optimization:"
-call prin(N,X,Space,X_pos)
+call prin(N,X,Space,X_pos,LLx,LLy,LLz)
 else 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -725,7 +716,7 @@ write(*,'(a)') "________________________________________________________________
 write(*,'(a)') ""
 end if 
 do i=1,coor
-if (abs(Eign(i)) > 1e-6 .and. Eign(i) < 0) then 
+if (abs(Eign(i)) > 1e-8 .and. Eign(i) < 0) then 
 write (*,'(a)') "you are at stationary state (Negative eignvalue)"
 exit
 else 

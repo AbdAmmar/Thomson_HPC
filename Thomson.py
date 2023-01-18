@@ -16,9 +16,9 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.geometry("1040x820")
+        self.geometry("1020x760")
         self.title("Thomson Input generator")
-        self.minsize(1040, 820)
+        self.minsize(1020, 760)
 
         #self.grid_rowconfigure(0, weight=1)
 
@@ -246,6 +246,12 @@ class App(customtkinter.CTk):
         self.button_run_EN = customtkinter.CTkButton(master=self.continer3, command=self.button_run_EN_callback, text="Run")
         self.button_run_EN.grid(row=11, column=0, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
         
+
+
+        self.Lx_EN.configure(state='disabled')
+        self.Ly_EN.configure(state='disabled')
+        self.Lz_EN.configure(state='disabled')
+
         ###########################################################################################
         
         
@@ -309,6 +315,7 @@ class App(customtkinter.CTk):
         self.textbox.configure(state='disabled')
 
 
+
     def button_write_EN_callback(self):
         self.textbox.configure(state='normal')
         
@@ -320,28 +327,64 @@ class App(customtkinter.CTk):
             self.textbox.insert("insert","dimension:  1 "  + "\n")
         
         if self.combobox_CS.get() == "FCC (3D)":
+            self.Lx_EN.configure(state='normal')
+            self.Ly_EN.configure(state='normal')
+            self.Lz_EN.configure(state='normal')
             self.Ly_EN.delete("0.0","end")
             self.Ly_EN.insert("0.0", 2*pi)
+            self.Lx_EN.configure(state='disabled')
+            self.Ly_EN.configure(state='disabled')
+            self.Lz_EN.configure(state='disabled')
             x=4*int(self.electron_N_EN.get("0.0", "end"))**3
         elif self.combobox_CS.get() == "BCC (3D)":
+            self.Lx_EN.configure(state='normal')
+            self.Ly_EN.configure(state='normal')
+            self.Lz_EN.configure(state='normal')
             self.Ly_EN.delete("0.0","end")
             self.Ly_EN.insert("0.0", 2*pi)
+            self.Lx_EN.configure(state='disabled')
+            self.Ly_EN.configure(state='disabled')
+            self.Lz_EN.configure(state='disabled')
             x=2*int(self.electron_N_EN.get("0.0", "end"))**3
         elif self.combobox_CS.get() == "SC (3D)":
+            self.Lx_EN.configure(state='normal')
+            self.Ly_EN.configure(state='normal')
+            self.Lz_EN.configure(state='normal')
             self.Ly_EN.delete("0.0","end")
             self.Ly_EN.insert("0.0", 2*pi)
+            self.Lx_EN.configure(state='disabled')
+            self.Ly_EN.configure(state='disabled')
+            self.Lz_EN.configure(state='disabled')
             x=int(self.electron_N_EN.get("0.0", "end"))**3
         elif self.combobox_CS.get() == "HEX (2D)":
+            self.Lx_EN.configure(state='normal')
+            self.Ly_EN.configure(state='normal')
+            self.Lz_EN.configure(state='normal')
             self.Ly_EN.delete("0.0","end")
             self.Ly_EN.insert("0.0", sqrt(3)*pi)
+            self.Lx_EN.configure(state='disabled')
+            self.Ly_EN.configure(state='disabled')
+            self.Lz_EN.configure(state='disabled')
             x=4*int(self.electron_N_EN.get("0.0", "end"))**2
         elif self.combobox_CS.get() == "SL (2D)":
+            self.Lx_EN.configure(state='normal')
+            self.Ly_EN.configure(state='normal')
+            self.Lz_EN.configure(state='normal')
             self.Ly_EN.delete("0.0","end")
             self.Ly_EN.insert("0.0", 2*pi)
+            self.Lx_EN.configure(state='disabled')
+            self.Ly_EN.configure(state='disabled')
+            self.Lz_EN.configure(state='disabled')
             x=int(self.electron_N_EN.get("0.0", "end"))**2
         elif self.combobox_CS.get() == "ED (1D)":
+            self.Lx_EN.configure(state='normal')
+            self.Ly_EN.configure(state='normal')
+            self.Lz_EN.configure(state='normal')
             self.Ly_EN.delete("0.0","end")
             self.Ly_EN.insert("0.0", 2*pi)
+            self.Lx_EN.configure(state='disabled')
+            self.Ly_EN.configure(state='disabled')
+            self.Lz_EN.configure(state='disabled')
             x=int(self.electron_N_EN.get("0.0", "end"))
             
         self.textbox.insert("insert","electron:  " + str(x)+"\n") # type: ignore
@@ -372,25 +415,25 @@ class App(customtkinter.CTk):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k,10)) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,18)) + "\t \t" + str(round(d1*j,18)) + "\t \t" + str(round(d1*k,18)) + "\n")
                         
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,10)) + "\t \t" + str(round(d1*j+d2,10)) + "\t \t" + str(round(d1*k,10)) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,18)) + "\t \t" + str(round(d1*j+d2,18)) + "\t \t" + str(round(d1*k,18)) + "\n")
             
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j+d2,10)) + "\t \t" + str(round(d1*k+d2,10)) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,18)) + "\t \t" + str(round(d1*j+d2,18)) + "\t \t" + str(round(d1*k+d2,18)) + "\n")
                         
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k+d2,10)) + "\n")
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,18)) + "\t \t" + str(round(d1*j,18)) + "\t \t" + str(round(d1*k+d2,18)) + "\n")
                         
                         
                         
@@ -406,13 +449,13 @@ class App(customtkinter.CTk):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k,10)) + "\n") 
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,18)) + "\t \t" + str(round(d1*j,18)) + "\t \t" + str(round(d1*k,18)) + "\n") 
             
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,10)) + "\t \t" + str(round(d1*j+d2,10)) + "\t \t" + str(round(d1*k+d2,10)) + "\n")               
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i+d2,18)) + "\t \t" + str(round(d1*j+d2,18)) + "\t \t" + str(round(d1*k+d2,18)) + "\n")               
         
             
         if self.combobox_CS.get() == "SC (3D)":
@@ -426,7 +469,7 @@ class App(customtkinter.CTk):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     for k in range(int(self.electron_N_EN.get("0.0", "end"))):
                         icount += 1
-                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t" + str(round(d1*j,10)) + "\t \t" + str(round(d1*k,10)) + "\n") 
+                        self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,18)) + "\t \t" + str(round(d1*j,18)) + "\t \t" + str(round(d1*k,18)) + "\n") 
         
         if self.combobox_CS.get() == "SL (2D)":
             d1 = 1/int(self.electron_N_EN.get("0.0", "end"))
@@ -438,7 +481,7 @@ class App(customtkinter.CTk):
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,10)) + "\t \t \t" + str(round(d1*j,10)) + "\t" + "\n") 
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,18)) + "\t \t \t" + str(round(d1*j,18)) + "\t" + "\n") 
                     
         if self.combobox_CS.get() == "HEX (2D)":
             dx = pi/int(self.electron_N_EN.get("0.0", "end"))
@@ -449,11 +492,11 @@ class App(customtkinter.CTk):
                 
                 for i in range(2*int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,10)) + "\t \t \t" + str(round(2*dy*j,10)) + "\t" + "\n") 
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,18)) + "\t \t \t" + str(round(2*dy*j,18)) + "\t" + "\n") 
                 
                 for i in range(2*int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(round((dx*(i+0.5)),10)) + "\t \t \t" + str(round(((2*j+1)*dy),10)) + "\t" + "\n")
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round((dx*(i+0.5)),18)) + "\t \t \t" + str(round(((2*j+1)*dy),18)) + "\t" + "\n")
                                        
         
         if self.combobox_CS.get() == "ED (1D)":
@@ -462,7 +505,7 @@ class App(customtkinter.CTk):
             self.textbox.insert("insert","geometry" + "\n") 
             for i in range(1,int(self.electron_N_EN.get("0.0", "end"))+1):
                 icount += 1
-                self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,10))+ "\n") 
+                self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,18))+ "\n") 
         
         
         
