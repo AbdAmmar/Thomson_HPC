@@ -2,35 +2,32 @@ module print_g
 	implicit none
 	contains
     
-    subroutine prin(N,X,D,X_pos,LLx,LLy,LLz)
+    subroutine prin(N,X,D,X_pos)
 	implicit none 
 	
 	real*16, dimension(:,:),intent(in) :: X 
 	integer, intent(in) :: N , D 
 	integer :: i, j , coor
-	real*16 :: LLx , LLy , LLz 
 	real*16, dimension(N,D) :: X_pos 
     real*16, parameter :: pi = ACOS(-1.0d0)
 	
 	coor = N*D
 	if (D == 1 ) then 
 	do i = 1,coor
-	X_pos(:,1) = X(1:N,1) + LLx/2
+	X_pos(:,1) = X(1:N,1)
 	end do
 	else if (D == 2) then
 	do i = 1,coor 
-	X_pos(:,1) = X(1:N,1) + LLx/2
-	X_pos(:,2) = X(N+1:2*N,1) + LLy/2
-
+	X_pos(:,1) = X(1:N,1)
+	X_pos(:,2) = X(N+1:2*N,1)
 	end do
 	else if (D == 3) then
 	do i = 1,coor
-	X_pos(:,1) = X(1:N,1) + LLx/2
-	X_pos(:,2) = X(N+1:2*N,1) + LLy/2 
-	X_pos(:,3) = X(2*N+1:3*N,1) + LLz/2
+	X_pos(:,1) = X(1:N,1)
+	X_pos(:,2) = X(N+1:2*N,1)
+	X_pos(:,3) = X(2*N+1:3*N,1)
 	end do
 	end if 
-
 	
 	
 	write(*,'(a)') ""
@@ -49,7 +46,7 @@ module print_g
 	end if 
 	write(*,'(a)') ""
 	DO i = 1, N
-		write (*,'(I4,a,f26.16,f26.16,f26.16)') i,"      " , X_pos(i, :) 
+		write (*,'(I4,a,f26.16,f26.16,f26.16)') i,"      " , X_pos(i, :)
 	END DO
 	
 	endsubroutine

@@ -209,7 +209,7 @@ end if
 
 !!!!!!!!!!!!!!!! print the geometry  !!!!!!!!!!!!!!!!!!!
 write(*,'(a)') "The geometry before the Optimization"
-call prin(N,X,Space,X_pos,LLx,LLy,LLz)
+call prin(N,X,Space,X_pos)
 
 
 !!!  get the geodesic distance   !!!
@@ -403,7 +403,7 @@ if (showa /= 'show') then
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
 end if 
-    write(*,'(a,f20.16,a,i5,a)') "Geometry converged at",  sum(TEa) ,"   after " ,iter-1  , " Loops"
+    write(*,'(a,f20.16,a,i5,a)') "Geometry converged at    ",  sum(TEa) ,"   after " ,iter-1  , " Loops"
     write(*,'(a)') ""
 	write(*,'(a,E20.10)') "The derivative =     ", norm2(Gim)
 exit
@@ -523,10 +523,10 @@ if (pera == "periodic") then
 	
 	if (space == 1 ) then 
 	do i = 1,size(X)
-	do while (X(i,1) < -0.5d0 * LLx )
+	do while (X(i,1) < 0 )
 		X(i,1) = X(i,1) + LLx
 	end do 
-	do while (X(i,1) >= 0.5d0 * LLx)
+	do while (X(i,1) > LLx)
 			X(i,1) = X(i,1) - LLx 
 	end do
 	if (X(i,1) == 0) then
@@ -536,10 +536,10 @@ if (pera == "periodic") then
 
 	else if (space == 2) then 
 	do i = 1,(size(X)/2)
-	do while (X(i,1) < -0.5d0 * LLx )
+	do while (X(i,1) < 0 )
 	X(i,1) = X(i,1) + LLx
 	end do 
-	do while (X(i,1) > 0.5d0 * LLx)
+	do while (X(i,1) > LLx)
 			X(i,1) = X(i,1) - LLx 
 	end do
 	if (X(i,1) == 0) then
@@ -548,10 +548,10 @@ if (pera == "periodic") then
 	end do
 
 	do i = (size(X)/2)+1,size(X)
-	do while (X(i,1) < -0.5d0 *LLy )
-		X(i,1) = X(i,1) + LLy
+	do while (X(i,1) < 0 )
+	X(i,1) = X(i,1) + LLy
 	end do 
-	do while (X(i,1) >= 0.5d0*LLy)
+	do while (X(i,1) > LLy)
 			X(i,1) = X(i,1) - LLy
 	end do
 	if (X(i,1) == 0) then
@@ -563,37 +563,46 @@ if (pera == "periodic") then
 
 	do i=1,3*N
 	if (i <= N ) then 
-	do while (X(i,1) < -0.5d0 * LLx )
+	do while (X(i,1) < 0 )
 	X(i,1) = X(i,1) + LLx
 	end do 
-	do while (X(i,1) >= 0.5d0 * LLx)
+	do while (X(i,1) > LLx)
 		X(i,1) = X(i,1) - LLx 
-	end do 
+	end do
+	if (X(i,1) == 0) then
+	X(i,1)=X(i,1)
+	end if 
 	else if (i > N .and. i <= 2*N) then
-	do while (X(i,1) < -0.5d0 * LLy )
+	do while (X(i,1) < 0 )
 	X(i,1) = X(i,1) + LLy
 	end do 
-	do while (X(i,1) >= 0.5d0*LLy)
+	do while (X(i,1) > LLy)
 		X(i,1) = X(i,1) - LLy
 	end do
+	if (X(i,1) == 0) then
+	X(i,1)=X(i,1)
+	end if 
     else 
-	do while (X(i,1) < -0.5d0 * LLz )
+	do while (X(i,1) < 0 )
 	X(i,1) = X(i,1) + LLz
 	end do 
-	do while (X(i,1) >= 0.5d0 * LLz)
+	do while (X(i,1) > LLz)
 		X(i,1) = X(i,1) - LLz
-	end do 
+	end do
+	if (X(i,1) == 0) then
+	X(i,1)=X(i,1)
+	end if 
 	end if 
 	end do 
 	end if
 	
-end if 
+end if
 
 !!!!!!!!!!    print the final geometry  !!!!!!!!!!!!
 if (showa == "show") then
 write(*,'(a)') ""
 write(*,'(a)') "The geometry after the optimization:"
-call prin(N,X,Space,X_pos,LLx,LLy,LLz)
+call prin(N,X,Space,X_pos)
 else 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

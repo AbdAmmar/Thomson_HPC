@@ -8,13 +8,11 @@ module Thomson_problem
 
 	real*16, dimension(:,:), intent(in) :: X
 	integer, intent(in) :: N , D
-	real*16, intent(in) :: Lx, Ly , Lz
+	real*16, intent(in) :: Lx, Ly , Lz 
 	real*16, dimension(N),intent(out) :: E
 	integer :: i,j
 	real*16 :: ax , ay , az 
 	real*16, parameter :: pi = ACOS(-1.0d0)
-	
-	
 	
 	
 	E=0.d0
@@ -26,28 +24,28 @@ module Thomson_problem
 		if (j > i) then
 		
 		ax = (X(i,1)-X(j,1))
-		if (ax > 0.5d0 * Lx*2.d0*pi) then 
-			ax = ax - Lx*2.d0*pi
-		else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-			ax = ax + Lx*2.d0*pi
+		if (ax >= pi/Lx ) then 
+			ax = 2.d0*pi/Lx - ax  
+		end if 
+		if (ax < -pi/Lx ) then 
+			ax = 2.d0*pi/Lx + ax  
 		end if
-		
 		ay = (X(i+N,1)-X(j+N,1))
-		if (ay > 0.5d0 * Ly*2.d0*pi) then 
-			ay = ay - Ly*2.d0*pi
-		else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-			ay = ay + Ly*2.d0*pi
+		if (ay >= pi/Ly ) then 
+			ay = 2.d0*pi/Ly - ay  
+		end if 
+		if (ay < -pi/Ly ) then 
+			ay = 2.d0*pi/Ly + ay  
 		end if
-		
 		az = (X(i+2*N,1)-X(j+2*N,1))
-		if (az > 0.5d0 * Lz*2.d0*pi) then 
-			az = az - Lz*2.d0*pi
-		else if (az <= -0.5d0 * Lz*2.d0*pi) then
-			az = az + Lz*2.d0*pi
+		if (az >= pi/Lz ) then 
+			az = 2.d0*pi/Lz - az  
+		end if 
+		if (az < -pi/Lz ) then 
+			az = 2.d0*pi/Lz + az  
 		end if
 		
 			E(i)=E(i)+ (Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-0.5d0)
-			
 		end if 
 		end do
 	end do 
@@ -61,17 +59,18 @@ module Thomson_problem
 		if (j > i) then
 		
 		ax = (X(i,1)-X(j,1))
-		if (ax > 0.5d0 * Lx*2.d0*pi) then 
-			ax = ax - Lx*2.d0*pi
-		else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-			ax = ax + Lx*2.d0*pi
+		if (ax >= pi/Lx ) then 
+			ax = 2.d0*pi/Lx - ax  
+		end if 
+		if (ax < -pi/Lx ) then 
+			ax = 2.d0*pi/Lx + ax  
 		end if
-		
 		ay = (X(i+N,1)-X(j+N,1))
-		if (ay > 0.5d0 * Ly*2.d0*pi) then 
-			ay = ay - Ly*2.d0*pi
-		else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-			ay = ay + Ly*2.d0*pi
+		if (ay >= pi/Ly ) then 
+			ay = 2.d0*pi/Ly - ay  
+		end if 
+		if (ax < -pi/Ly ) then 
+			ay = 2.d0*pi/Ly + ay  
 		end if
 		
 			E(i)=E(i)+ (Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2.d0)*(2.d0-2.d0*cos(Ly*ay)))**(-0.5d0)
@@ -88,11 +87,13 @@ module Thomson_problem
 		if (j > i) then
 		
 		ax = (X(i,1)-X(j,1))
-		if (ax > 0.5d0 * Lx*2.d0*pi) then 
-			ax = ax - Lx*2.d0*pi
-		else if (ax < 0.5d0 * Lx*2.d0*pi) then
-			ax = ax + Lx*2.d0*pi
+		if (ax >= pi/Lx ) then 
+			ax = 2.d0*pi/Lx - ax  
+		end if 
+		if (ax < -pi/Lx ) then 
+			ax = 2.d0*pi/Lx + ax  
 		end if
+		
 		
 			E(i)=E(i)+(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*ax)))**(-0.5d0)
 		end if 
@@ -113,42 +114,17 @@ module Thomson_problem
 	real*16, dimension(3*N,3*N) :: df
 	real*16 , dimension(3*N) :: tdf
 	integer :: i,j
-	real*16 :: ax , ay , az 
-	real*16, parameter :: pi = ACOS(-1.0d0)
 	
 	
 	df=0.d0
 	tdf=0.d0 
 		
 	if ( D == 3 ) then 
-	
-	
+
 	do i=1,N
 		do j=1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-				
-			df(i,j) = - (Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)*Lx**(-1.d0)*sin(Lx*ax)
+			df(i,j) = - (Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-1.5d0)*Lx**(-1.d0)*sin(Lx*(X(i,1)-X(j,1)))
 			end if 
 		end do
 	end do
@@ -156,29 +132,7 @@ module Thomson_problem
 	do i=N+1,2*N
 		do j=N+1,2*N
 			if (j /= i) then
-			
-			ax = (X(i-N,1)-X(j-N,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i,1)-X(j,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+N,1)-X(j+N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			df(i,j) =  - (Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)*Ly**(-1.d0)*sin(Ly*ay)
+			df(i,j) =  - (Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i-N,1)-X(j-N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i,1)-X(j,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+N,1)-X(j+N,1)))))**(-1.5d0)*Ly**(-1.d0)*sin(Ly*(X(i,1)-X(j,1)))
 			end if 
 		end do
 	end do
@@ -186,29 +140,7 @@ module Thomson_problem
 	do i=2*N+1,3*N
 		do j=2*N+1,3*N
 			if (j /= i) then
-			
-			ax = (X(i-2*N,1)-X(j-2*N,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i-N,1)-X(j-N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i,1)-X(j,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			df(i,j) =  - (Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)*Lz**(-1.d0)*sin(Lz*az)
+			df(i,j) =  - (Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i-2*N,1)-X(j-2*N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i-N,1)-X(j-N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i,1)-X(j,1)))))**(-1.5d0)*Lz**(-1.d0)*sin(Lz*(X(i,1)-X(j,1)))
 			end if 
 		end do
 	end do
@@ -221,22 +153,7 @@ module Thomson_problem
 	do i=1,N
 		do j=1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			df(i,j) = -Lx**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-1.5d0)*sin(Lx*ax)
+			df(i,j) = -Lx**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-1.5d0)*sin(Lx*(X(i,1)-X(j,1)))
 			end if 
 		end do
 	end do
@@ -244,22 +161,7 @@ module Thomson_problem
 	do i=N+1,2*N
 		do j=N+1,2*N
 			if (j /= i) then
-			
-			ax = (X(i-N,1)-X(j-N,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i,1)-X(j,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			df(i,j) = -Ly**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-1.5d0)*sin(Ly*ay)
+			df(i,j) = -Ly**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i-N,1)-X(j-N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i,1)-X(j,1)))))**(-1.5d0)*sin(Ly*(X(i,1)-X(j,1)))
 			end if 
 		end do
 	end do
@@ -271,15 +173,7 @@ module Thomson_problem
 	do i=1,N
 		do j=1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			df(i,j) = -Lx**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax)))**(-1.5d0)*sin(Lx*ax)
+			df(i,j) = -Lx**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1)))))**(-1.5d0)*sin(Lx*(X(i,1)-X(j,1)))
 			end if 
 		end do
 	end do
@@ -298,8 +192,6 @@ module Thomson_problem
 	real*8 ,dimension (N,N) :: Rx , Ry ,Rz , Rxy, Rxz , Ryz
 	real*8, dimension(:,:),allocatable :: H
 	integer :: i,j
-	real*16 :: ax , ay , az 
-	real*16, parameter :: pi = ACOS(-1.0d0)
 
 			Rx=0.d0
 			Ry=0.d0
@@ -317,80 +209,11 @@ module Thomson_problem
 	do i=1,3*N
 		do j=1,3*N
 			if (j /= i .and. j<= N .and. i<=N) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			H(i,i) = H(i,i) +3*Lx**(-2.d0)*sin(Lx*ax)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)-cos(Lx*ax)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)
-
+			H(i,i) = H(i,i) +3*Lx**(-2.d0)*sin(Lx*(X(i,1)-X(j,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)-cos(Lx*(X(i,1)-X(j,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-1.5d0)
 			else if (j /= i .and. j> N .and. j<=2*N .and. i > N .and. i<=2*N) then
-			
-			ax = (X(i-N,1)-X(j-N,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i,1)-X(j,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+N,1)-X(j+N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			H(i,i) = H(i,i) +3*Ly**(-2.d0)*sin(Ly*ay)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)-cos(Ly*ay)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)
-
+			H(i,i) = H(i,i) +3*Ly**(-2.d0)*sin(Ly*(X(i,1)-X(j,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i- N,1)-X(j- N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i,1)-X(j,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+ N,1)-X(j+ N,1)))))**(-2.5d0)-cos(Ly*(X(i,1)-X(j,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i- N,1)-X(j- N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i,1)-X(j,1))))+Lz**(-2)*(2-2.d0*cos(Lz*(X(i+ N,1)-X(j+ N,1)))))**(-1.5d0)
 			else if (j /= i .and. j> 2*N .and. i > 2*N ) then
-			
-			ax = (X(i-2*N,1)-X(j-2*N,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i-N,1)-X(j-N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i,1)-X(j,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			H(i,i) = H(i,i) +3*Lz**(-2.d0)*sin(Lz*az)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)-cos(Lz*az)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)
-
+			H(i,i) = H(i,i) +3*Lz**(-2.d0)*sin(Lz*(X(i,1)-X(j,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i-2*N,1)-X(j-2*N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i-N,1)-X(j-N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i,1)-X(j,1)))))**(-2.5d0)-cos(Lz*(X(i,1)-X(j,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i-2*N,1)-X(j-2*N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i-N,1)-X(j-N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i,1)-X(j,1)))))**(-1.5d0)
 			end if 
 		end do
 	end do
@@ -402,30 +225,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			Rx(i,j) = -3.d0*Lx**(-2.d0)*sin(Lx*ax)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)+cos(Lx*ax)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)
-
+			Rx(i,j) = -3.d0*Lx**(-2.d0)*sin(Lx*(X(i,1)-X(j,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)+cos(Lx*(X(i,1)-X(j,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-1.5d0)
 			end if 
 		end do 
 	end do
@@ -436,30 +236,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			Ry(i,j) = -3.d0*Ly**(-2.d0)*sin(Ly*ay)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)+cos(Ly*ay)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)
-
+			Ry(i,j) = -3.d0*Ly**(-2.d0)*sin(Ly*(X(i+N,1)-X(j+N,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)+cos(Ly*(X(i+N,1)-X(j+N,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-1.5d0)
 			end if 
 		end do 
 	end do
@@ -473,30 +250,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			Rz(i,j) = -3.d0*Lz**(-2.d0)*sin(Lz*az)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)+cos(Lz*az)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-1.5d0)
-			
+			Rz(i,j) = -3.d0*Lz**(-2.d0)*sin(Lz*(X(i+2*N,1)-X(j+2*N,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)+cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-1.5d0)
 			end if 
 		end do 
 	end do
@@ -510,29 +264,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			    Rxy(i,j) = - 3.d0 *Lx**(-1)*Ly**(-1)* sin(Lx*ax)*sin(Ly*ay)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)
+			    Rxy(i,j) = - 3.d0 *Lx**(-1)*Ly**(-1)* sin(Lx*(X(i,1)-X(j,1)))*sin(Ly*(X(i+N,1)-X(j+N,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)
 			end if 
 		end do 
 	end do	
@@ -547,30 +279,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			    Rxz(i,j) = - 3.d0 *Lx**(-1)*Lz**(-1)* sin(Lx*ax)*sin(Lz*az)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)
-			
+			     Rxz(i,j) = - 3.d0 *Lx**(-1)*Lz**(-1)* sin(Lx*(X(i,1)-X(j,1)))*sin(Lz*(X(i+2*N,1)-X(j+2*N,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)
 			end if 
 		end do 
 	end do
@@ -584,29 +293,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			az = (X(i+2*N,1)-X(j+2*N,1))
-			if (az > 0.5d0 * Lz*2.d0*pi) then 
-				az = az - Lz*2.d0*pi
-			else if (az <= -0.5d0 * Lz*2.d0*pi) then
-				az = az + Lz*2.d0*pi
-			end if
-			
-			    Ryz(i,j) = - 3.d0 *Ly**(-1)*Lz**(-1)* sin(Ly*ay)*sin(Lz*az)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)+Lz**(-2)*(2.d0-2.d0*cos(Lz*az))))**(-2.5d0)
+			        Ryz(i,j) = - 3.d0 *Ly**(-1)*Lz**(-1)* sin(Ly*(X(i+N,1)-X(j+N,1)))*sin(Lz*(X(i+2*N,1)-X(j+2*N,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1))))))**(-2.5d0)
 			end if 
 		end do 
 	end do
@@ -620,30 +307,8 @@ module Thomson_problem
 	do  i = 1,N
     do j = 1,N
         if (j/=i) then
-		
-		ax = (X(i,1)-X(j,1))
-		if (ax > 0.5d0 * Lx*2.d0*pi) then 
-			ax = ax - Lx*2.d0*pi
-		else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-			ax = ax + Lx*2.d0*pi
-		end if
-			
-		ay = (X(i+N,1)-X(j+N,1))
-		if (ay > 0.5d0 * Ly*2.d0*pi) then 
-			ay = ay - Ly*2.d0*pi
-		else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-			ay = ay + Ly*2.d0*pi
-		end if
-			
-		az = (X(i+2*N,1)-X(j+2*N,1))
-		if (az > 0.5d0 * Lz*2.d0*pi) then 
-			az = az - Lz*2.d0*pi
-		else if (az <= -0.5d0 * Lz*2.d0*pi) then
-			az = az + Lz*2.d0*pi
-		end if
-		
-        H(i,i+N)=H(i,i+N)+3.d0*Lx**(-1.d0)*Ly**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)*sin(Lx*ax)*sin(Ly*ay)
-        H(i+N,i)=H(i+N,i)+3.d0*Lx**(-1.d0)*Ly**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az)))**(-2.5d0)*sin(Lx*ax)*sin(Ly*ay)
+        H(i,i+N)=H(i,i+N)+3.d0*Lx**(-1.d0)*Ly**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)*sin(Lx*(X(i,1)-X(j,1)))*sin(Ly*(X(i+N,1)-X(j+N,1)))
+        H(i+N,i)=H(i+N,i)+3.d0*Lx**(-1.d0)*Ly**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1)))))**(-2.5d0)*sin(Lx*(X(i,1)-X(j,1)))*sin(Ly*(X(i+N,1)-X(j+N,1)))
         end if 
     end do
 	end do 
@@ -657,30 +322,8 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
         if (j/=i) then
-		
-		ax = (X(i,1)-X(j,1))
-		if (ax > 0.5d0 * Lx*2.d0*pi) then 
-			ax = ax - Lx*2.d0*pi
-		else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-			ax = ax + Lx*2.d0*pi
-		end if
-			
-		ay = (X(i+N,1)-X(j+N,1))
-		if (ay > 0.5d0 * Ly*2.d0*pi) then 
-			ay = ay - Ly*2.d0*pi
-		else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-			ay = ay + Ly*2.d0*pi
-		end if
-			
-		az = (X(i+2*N,1)-X(j+2*N,1))
-		if (az > 0.5d0 * Lz*2.d0*pi) then 
-			az = az - Lz*2.d0*pi
-		else if (az <= -0.5d0 * Lz*2.d0*pi) then
-			az = az + Lz*2.d0*pi
-		end if
-		
-        H(i,i+2*N)=H(i,i+2*N)+3.d0*Lx**(-1.d0)*Lz**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax)+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az))))**(-2.5d0)*sin(Lx*ax)*sin(Lz*az)
-        H(i+2*N,i)=H(i+2*N,i)+3.d0*Lx**(-1.d0)*Lz**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax)+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az))))**(-2.5d0)*sin(Lx*ax)*sin(Lz*az)
+        H(i,i+2*N)=H(i,i+2*N)+3.d0*Lx**(-1.d0)*Lz**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1)))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1))))))**(-2.5d0)*sin(Lx*(X(i,1)-X(j,1)))*sin(Lz*(X(i+2*N,1)-X(j+2*N,1)))
+        H(i+2*N,i)=H(i+2*N,i)+3.d0*Lx**(-1.d0)*Lz**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1)))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1))))))**(-2.5d0)*sin(Lx*(X(i,1)-X(j,1)))*sin(Lz*(X(i+2*N,1)-X(j+2*N,1)))
         end if
 		end do
 	end do
@@ -694,30 +337,8 @@ module Thomson_problem
 	do  i = 1,N
 		do  j = 1,N
         if (j/=i) then
-		
-		ax = (X(i,1)-X(j,1))
-		if (ax > 0.5d0 * Lx*2.d0*pi) then 
-			ax = ax - Lx*2.d0*pi
-		else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-			ax = ax + Lx*2.d0*pi
-		end if
-			
-		ay = (X(i+N,1)-X(j+N,1))
-		if (ay > 0.5d0 * Ly*2.d0*pi) then 
-			ay = ay - Ly*2.d0*pi
-		else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-			ay = ay + Ly*2.d0*pi
-		end if
-			
-		az = (X(i+2*N,1)-X(j+2*N,1))
-		if (az > 0.5d0 * Lz*2.d0*pi) then 
-			az = az - Lz*2.d0*pi
-		else if (az <= -0.5d0 * Lz*2.d0*pi) then
-			az = az + Lz*2.d0*pi
-		end if
-		
-        H(i+N,i+2*N)=H(i+N,i+2*N)+3*Ly**(-1)*Lz**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+(Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az))))**(-2.5d0)*sin(Ly*ay)*sin(Lz*az)
-        H(i+2*N,i+N)=H(i+2*N,i+N)+3*Ly**(-1)*Lz**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+(Ly**(-2)*(2.d0-2.d0*cos(Ly*ay))+Lz**(-2)*(2.d0-2.d0*cos(Lz*az))))**(-2.5d0)*sin(Ly*ay)*sin(Lz*az)
+        H(i+N,i+2*N)=H(i+N,i+2*N)+3*Ly**(-1)*Lz**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+(Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1))))))**(-2.5d0)*sin(Ly*(X(i+N,1)-X(j+N,1)))*sin(Lz*(X(i+2*N,1)-X(j+2*N,1)))
+        H(i+2*N,i+N)=H(i+2*N,i+N)+3*Ly**(-1)*Lz**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+(Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1))))+Lz**(-2)*(2.d0-2.d0*cos(Lz*(X(i+2*N,1)-X(j+2*N,1))))))**(-2.5d0)*sin(Ly*(X(i+N,1)-X(j+N,1)))*sin(Lz*(X(i+2*N,1)-X(j+2*N,1)))
         end if 
 		end do 
 	end do
@@ -762,40 +383,11 @@ module Thomson_problem
 		do j=1,2*N
 			if (j /= i .and. j<= N .and. i<= N) then
 			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			
-			H(i,i) = H(i,i) +3*Lx**(-2.d0)*sin(Lx*ax)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-2.5d0)-cos(Lx*ax)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-1.5d0)
+			H(i,i) = H(i,i) +3*Lx**(-2.d0)*sin(Lx*(X(i,1)-X(j,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-2.5d0)-cos(Lx*(X(i,1)-X(j,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-1.5d0)
 			
 			else if (j /= i .and. j> N .and. j<=2*N .and. i > N .and. i<=2*N) then
 			
-			ax = (X(i-N,1)-X(j-N,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i,1)-X(j,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			H(i,i) = H(i,i) +3*Ly**(-2.d0)*sin(Ly*ay)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-2.5d0)-cos(Ly*ay)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-1.5d0)
+			H(i,i) = H(i,i) +3*Ly**(-2.d0)*sin(Ly*(X(i,1)-X(j,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i- N,1)-X(j- N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i,1)-X(j,1)))))**(-2.5d0)-cos(Ly*(X(i,1)-X(j,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i-N,1)-X(j-N,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i,1)-X(j,1)))))**(-1.5d0)
 			
 			end if 
 		end do
@@ -805,23 +397,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			
-			Rx(i,j) = -3*Lx**(-2)*sin(Lx*ax)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-2.5d0)+cos(Lx*ax)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-1.5d0)
+			Rx(i,j) = -3*Lx**(-2)*sin(Lx*(X(i,1)-X(j,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-2.5d0)+cos(Lx*(X(i,1)-X(j,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-1.5d0)
 			end if 
 		end do 
 	end do
@@ -830,22 +406,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			Ry(i,j) = -3*Ly**(-2)*sin(Ly*ay)**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-2.5d0)+cos(Ly*ay)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-1.5d0)
+			Ry(i,j) = -3*Ly**(-2)*sin(Ly*(X(i+N,1)-X(j+N,1)))**2*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-2.5d0)+cos(Ly*(X(i+N,1)-X(j+N,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-1.5d0)
 			end if 
 		end do 
 	end do
@@ -854,22 +415,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			ay = (X(i+N,1)-X(j+N,1))
-			if (ay > 0.5d0 * Ly*2.d0*pi) then 
-				ay = ay - Ly*2.d0*pi
-			else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-				ay = ay + Ly*2.d0*pi
-			end if
-			
-			    Rxy(i,j) = - 3 *Lx**(-1.d0)*Ly**(-1.d0)* sin(Lx*ax)*sin(Ly*ay)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-2.5d0)
+			    Rxy(i,j) = - 3 *Lx**(-1.d0)*Ly**(-1.d0)* sin(Lx*(X(i,1)-X(j,1)))*sin(Ly*(X(i+N,1)-X(j+N,1)))*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-2.5d0)
 			end if 
 		end do 
 	end do	
@@ -878,23 +424,8 @@ module Thomson_problem
 	do  i = 1,N
 		do j = 1,N
         if (j/=i) then
-		
-		ax = (X(i,1)-X(j,1))
-		if (ax > 0.5d0 * Lx*2.d0*pi) then 
-			ax = ax - Lx*2.d0*pi
-		else if (ax <= -0.5d0 * Lx*2.d0*pi) then
-			ax = ax + Lx*2.d0*pi
-		end if
-			
-		ay = (X(i+N,1)-X(j+N,1))
-		if (ay > 0.5d0 * Ly*2.d0*pi) then 
-			ay = ay - Ly*2.d0*pi
-		else if (ay <= -0.5d0 * Ly*2.d0*pi) then
-			ay = ay + Ly*2.d0*pi
-		end if
-		
-        H(i,i+N)=H(i,i+N)+3*Lx**(-1.d0)*Ly**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-2.5d0)*sin(Lx*ax)*sin(Ly*ay)
-        H(i+N,i)=H(i+N,i)+3*Lx**(-1.d0)*Ly**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*ax))+Ly**(-2)*(2.d0-2.d0*cos(Ly*ay)))**(-2.5d0)*sin(Lx*ax)*sin(Ly*ay)
+        H(i,i+N)=H(i,i+N)+3*Lx**(-1.d0)*Ly**(-1.d0)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-2.5d0)*sin(Lx*(X(i,1)-X(j,1)))*sin(Ly*(X(i+N,1)-X(j+N,1)))
+        H(i+N,i)=H(i+N,i)+3*Lx**(-1)*Ly**(-1)*(Lx**(-2)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1))))+Ly**(-2)*(2.d0-2.d0*cos(Ly*(X(i+N,1)-X(j+N,1)))))**(-2.5d0)*sin(Lx*(X(i,1)-X(j,1)))*sin(Ly*(X(i+N,1)-X(j+N,1)))
         end if 
 		end do
 	end do 
@@ -921,15 +452,7 @@ module Thomson_problem
 	do i=1,N
 		do j=1,N
 			if (j /= i ) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax < 0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			H(i,i) = H(i,i) +3.d0*Lx**(-2.d0)*sin(Lx*ax)**2*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*ax)))**(-2.5d0)-cos(Lx*ax)*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*ax)))**(-1.5d0)
+			H(i,i) = H(i,i) +3.d0*Lx**(-2)*sin(Lx*(X(i,1)-X(j,1)))**2*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1)))))**(-2.5d0)-cos(Lx*(X(i,1)-X(j,1)))*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1)))))**(-1.5d0)
 			end if 
 		end do
 	end do
@@ -937,15 +460,7 @@ module Thomson_problem
 	do i = 1,N
 		do j = 1,N
 			if (j /= i) then
-			
-			ax = (X(i,1)-X(j,1))
-			if (ax > 0.5d0 * Lx*2.d0*pi) then 
-				ax = ax - Lx*2.d0*pi
-			else if (ax < 0.5d0 * Lx*2.d0*pi) then
-				ax = ax + Lx*2.d0*pi
-			end if
-			
-			H(i,j) = H(i,j) -3.d0*Lx**(-2.d0)*sin(Lx*ax)**2*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*ax)))**(-2.5d0)+cos(Lx*ax)*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*ax)))**(-1.5d0)
+			    H(i,j) = H(i,j) -3.d0*Lx**(-2.d0)*sin(Lx*(X(i,1)-X(j,1)))**2*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1)))))**(-2.5d0)+cos(Lx*(X(i,1)-X(j,1)))*(Lx**(-2.d0)*(2.d0-2.d0*cos(Lx*(X(i,1)-X(j,1)))))**(-1.5d0)
 			end if 
 		end do 
 	end do
