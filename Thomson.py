@@ -481,31 +481,35 @@ class App(customtkinter.CTk):
             for i in range(int(self.electron_N_EN.get("0.0", "end"))):
                 for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,18)) + "\t \t \t" + str(round(d1*j,18)) + "\t" + "\n") 
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round(d1*i,20)) + "\t \t \t" + str(round(d1*j,20)) + "\t" + "\n") 
                     
         if self.combobox_CS.get() == "HEX (2D)":
             dx = pi/int(self.electron_N_EN.get("0.0", "end"))
             dy = dx*sqrt(3)/2
             icount = 0
+
+            self.textbox.insert("insert", "multiply" + "\n")   # type: ignore
+
             self.textbox.insert("insert","geometry" + "\n") 
             for j in range(int(self.electron_N_EN.get("0.0", "end"))):
                 
                 for i in range(2*int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,18)) + "\t \t \t" + str(round(2*dy*j,18)) + "\t" + "\n") 
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i/(2*pi),20)) + "\t \t \t" + str(round(2*dy*j/(sqrt(3)*pi),20)) + "\t" + "\n") 
                 
                 for i in range(2*int(self.electron_N_EN.get("0.0", "end"))):
                     icount += 1
-                    self.textbox.insert("insert", str(icount) + "\t" + str(round((dx*(i+0.5)),18)) + "\t \t \t" + str(round(((2*j+1)*dy),18)) + "\t" + "\n")
+                    self.textbox.insert("insert", str(icount) + "\t" + str(round((dx*(i+0.5)/(2*pi)),20)) + "\t \t \t" + str(round(((2*j+1)*dy/(sqrt(3)*pi)),20)) + "\t" + "\n")
                                        
         
         if self.combobox_CS.get() == "ED (1D)":
-            dx = 2*pi/int(self.electron_N_EN.get("0.0", "end"))
+            dx = 1/int(self.electron_N_EN.get("0.0", "end"))
             icount = 0
+            self.textbox.insert("insert", "multiply" + "\n")   # type: ignore
             self.textbox.insert("insert","geometry" + "\n") 
             for i in range(1,int(self.electron_N_EN.get("0.0", "end"))+1):
                 icount += 1
-                self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,18))+ "\n") 
+                self.textbox.insert("insert", str(icount) + "\t" + str(round(dx*i,20))+ "\n") 
         
         
         
