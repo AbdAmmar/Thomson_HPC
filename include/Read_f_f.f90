@@ -29,7 +29,7 @@ module read_f_f
 	geob  = "geometry"
 	boxb  = "box:"
 	showb = "show"
-    fixb  = "fixed"
+  fixb  = "fixed"
 	multib= "multiply"
 	harb  = "harmonic"
 	curvb = "parabola"
@@ -38,7 +38,7 @@ module read_f_f
 	fconab = "Fconstant"
 	animb ="animation"
 	showhessianb="hessian"
-    distanceb = "distance"
+  distanceb = "distance"
 
 
 	nlines = 0

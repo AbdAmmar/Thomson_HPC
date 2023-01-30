@@ -1,6 +1,6 @@
 GF90 = gfortran
 
-XFLAG = -fopenmp -llapack -ffree-line-length-none
+XFLAG = -fopenmp -llapack -ffree-line-length-none -O3  -march=native  -fimplicit-none   -fwhole-file 
 
 BIN = Thomson
 

@@ -285,7 +285,7 @@ write(*,'(a)') "________________________________________________________________
 write(*,'(a)') ""
 end if 
 if (showa /= 'show') then 
-write(*,'(a)') ' Loop  |        Energy         |       Energy differance       |         Derivative '
+write(*,'(a)') ' Loop   |          Energy           |       Energy differance       |       Derivative '
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
 end if 
@@ -403,7 +403,7 @@ if (showa /= 'show') then
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
 end if 
-    write(*,'(a,f20.16,a,i5,a)') "Geometry converged at    ",  sum(TEa) ,"   after " ,iter-1  , " Loops"
+    write(*,'(a,f24.16,a,i5,a)') "Geometry converged at    ",  sum(TEa) ,"   after " ,iter-1  , " Loops"
     write(*,'(a)') ""
 	write(*,'(a,E20.10)') "The derivative =     ", norm2(Gim)
 exit
@@ -651,7 +651,7 @@ end if
 if (showa == 'show') then
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
-write(*,'(a,f16.12,a,E8.2)') "The energy after optimization =  ",  sum(TEa) , "        |   The derivative =  ", norm2(Gim)
+write(*,'(a,f24.16,a,E8.2)') "The energy after optimization =   ",  sum(TEa) , "        |   The derivative =  ", norm2(Gim)
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
 end if
@@ -659,7 +659,7 @@ end if
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if (showa /= 'show') then
 call energy(N,X_old,space,Lx,Ly,Lz,TEb)
-write(*,'(I4,a,f20.16,a,f20.16,a,E12.5)')  iter ,"    ", sum(TEa) ,"         ", abs(sum(TEa)-sum(TEb)),"              ", Norm2(Gim) 
+write(*,'(I4,a,f24.16,a,f20.16,a,E12.5)')  iter ,"    ", sum(TEa) ,"         ", abs(sum(TEa)-sum(TEb)),"              ", Norm2(Gim) 
 end if 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 iter = iter + 1	
@@ -684,6 +684,12 @@ if (showa /= 'show' ) then
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
 end if
+
+if (showa /= 'show') then
+call prin(N,X,Space,X_pos)
+print*, ""
+end if 
+
 
 if (showhessiana == "hessian") then
 write(*,'(a)') "____________________________________________________________________________________________"
@@ -711,9 +717,8 @@ if (distancea == 'distance') then
 end if 
 
 
+call diagonalize_matrix(coor,H_mod,Eign)
 
-call Diagonalization(H_mod,Eign,EignV,coor)
-if (showa == 'show') then
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
 print *, "            The EignValues of the hessien"
@@ -721,9 +726,9 @@ print *, ""
 do i = 1,coor 
 write (*,'(f20.12)') Eign(i)
 end do
+
 write(*,'(a)') "____________________________________________________________________________________________"
 write(*,'(a)') ""
-end if 
 do i=1,coor
 if (abs(Eign(i)) > 1e-8 .and. Eign(i) < 0) then 
 write (*,'(a)') "you are at stationary state (Negative eignvalue)"
