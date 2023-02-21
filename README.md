@@ -3,8 +3,6 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
 
 ![Screenshot](GUI.png)
 
-![Video](hexagonal36.mp4)
-
 # Prerequisite
 * compiler (gfortran recommended):
 
