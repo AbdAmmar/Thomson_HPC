@@ -1,7 +1,7 @@
-dimension: 3
-electron:    9
-tolerance:   0.10E-07
-itermax:      10000
+3											# Dimension
+9											# Number of electron
+0.10E-07									# The tolerance
+10000										# The maximum number of iteration
 box:  6.2831853071795862  6.2831853071795862  6.2831853071795862
 periodic
 random

@@ -1,7 +1,7 @@
-dimension: 2
-electron:    16
-tolerance:   0.10E-07
-itermax:       1000
+2											# Dimension
+16											# Number of electron
+0.10E-07									# The tolerance
+10000										# The maximum number of iteration
 box:  6.2831853071795862  5.4413980927026530  6.2831853071795862
 periodic
 show
