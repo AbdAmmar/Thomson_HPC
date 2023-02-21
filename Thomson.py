@@ -133,6 +133,9 @@ class App(customtkinter.CTk):
         
         self.checkbox_M = customtkinter.CTkCheckBox(master=self.continer1, text="Multiply by the Box size", onvalue="multiply", offvalue="")
         self.checkbox_M.grid(row=6 ,column=1,columnspan=3,  padx=10, pady=10 , sticky="w"  )
+
+        self.checkbox_D = customtkinter.CTkCheckBox(master=self.continer1, text="Show distance matrix", onvalue="distance", offvalue="")
+        self.checkbox_D.grid(row=7 ,column=1,columnspan=3,  padx=10, pady=10 , sticky="w"  )
         
         
         ############################################################################################
@@ -230,6 +233,9 @@ class App(customtkinter.CTk):
         
         self.checkbox_H_EN = customtkinter.CTkCheckBox(master=self.continer3, text="Show Hessian Matrix", onvalue="hessian", offvalue="")
         self.checkbox_H_EN.grid(row=6 ,column=0, padx=10, pady=10 , sticky="w"  )
+
+        self.checkbox_D_EN = customtkinter.CTkCheckBox(master=self.continer3, text="Show distance Matrix", onvalue="distance", offvalue="")
+        self.checkbox_D_EN.grid(row=6 ,column=1, padx=10, pady=10 , sticky="w"  )
         
         self.checkbox_S_EN = customtkinter.CTkCheckBox(master=self.continer3, text="Show All Result", onvalue="show", offvalue="")
         self.checkbox_S_EN.grid(row=7 ,column=0, padx=10, pady=10 , sticky="w"  )
@@ -260,12 +266,12 @@ class App(customtkinter.CTk):
 
     def button_write_callback(self):
         self.textbox.configure(state='normal')
-        self.textbox.insert("insert","dimension:  " + self.combobox.get() + "\n")
-        self.textbox.insert("insert","electron:  " + self.electron_N.get("0.0", "end") )
-        self.textbox.insert("insert","tolerance:  " + self.tolerance_N.get("0.0", "end") )
-        self.textbox.insert("insert","itermax:  " + self.itermax_N.get("0.0", "end"))
+        self.textbox.insert("insert",self.combobox.get()                   +"\t"+"# Dimension" + "\n")
+        self.textbox.insert("insert",self.electron_N.get("0.0", "end-1c")  +"\t"+"# Number of electron" + "\n" )
+        self.textbox.insert("insert",self.tolerance_N.get("0.0", "end-1c") +"\t"+"# The tolerance" + "\n" )
+        self.textbox.insert("insert",self.itermax_N.get("0.0", "end-1c")   +"\t"+"# The maximum number of iteration" + "\n")
         self.textbox.insert("insert","box:  " + self.Lx.get("0.0", "end-1c")  +" "+ self.Ly.get("0.0", "end-1c") +"  "+ self.Lz.get("0.0", "end"))
-        self.textbox.insert("insert","periodic" + "\n")
+
         
         
         if self.checkbox_R.get() == "random":
@@ -278,6 +284,9 @@ class App(customtkinter.CTk):
             self.textbox.insert("insert", self.checkbox_A.get() + "\n")   # type: ignore
         if self.checkbox_H.get() == "hessian":
             self.textbox.insert("insert", self.checkbox_H.get() + "\n")   # type: ignore
+        if self.checkbox_D.get() == "distance":
+            self.textbox.insert("insert", self.checkbox_D.get() + "\n")   # type: ignore
+
         
         if self.checkbox_R.get() == "random":
             self.textbox.insert("insert","geometry" + "\n")
@@ -320,11 +329,11 @@ class App(customtkinter.CTk):
         self.textbox.configure(state='normal')
         
         if self.combobox_CS.get() == "FCC (3D)" or self.combobox_CS.get() == "BCC (3D)" or self.combobox_CS.get() == "SC (3D)":
-            self.textbox.insert("insert","dimension:  3 "  + "\n")
+            self.textbox.insert("insert","3"            +"\t"+"# Dimension" + "\n")
         elif self.combobox_CS.get() == "SL (2D)" or self.combobox_CS.get() == "HEX (2D)":
-            self.textbox.insert("insert","dimension:  2 "  + "\n")
+            self.textbox.insert("insert","2"            +"\t"+"# Dimension" + "\n")
         elif self.combobox_CS.get() == "ED (1D)":
-            self.textbox.insert("insert","dimension:  1 "  + "\n")
+            self.textbox.insert("insert","1"            +"\t"+"# Dimension" + "\n")
         
         if self.combobox_CS.get() == "FCC (3D)":
             self.Lx_EN.configure(state='normal')
@@ -387,11 +396,10 @@ class App(customtkinter.CTk):
             self.Lz_EN.configure(state='disabled')
             x=int(self.electron_N_EN.get("0.0", "end"))
             
-        self.textbox.insert("insert","electron:  " + str(x)+"\n") # type: ignore
-        self.textbox.insert("insert","tolerance:  " + self.tolerance_N_EN.get("0.0", "end") )
-        self.textbox.insert("insert","itermax:  " + self.itermax_N_EN.get("0.0", "end"))
+        self.textbox.insert("insert",str(x)                                   +"\t"+"# Number of electron" + "\n")
+        self.textbox.insert("insert",self.tolerance_N_EN.get("0.0", "end-1c") +"\t"+"# The tolerance" + "\n")
+        self.textbox.insert("insert",self.itermax_N_EN.get("0.0", "end-1c")   +"\t"+"# The maximum number of iteration" + "\n")
         self.textbox.insert("insert","box:  " + self.Lx_EN.get("0.0", "end-1c")  +"  "+ self.Ly_EN.get("0.0", "end-1c") +"  "+ self.Lz_EN.get("0.0", "end"))
-        self.textbox.insert("insert","periodic" + "\n")
         
         if self.checkbox_S_EN.get() == "show":
             self.textbox.insert("insert", self.checkbox_S_EN.get() + "\n")   # type: ignore  
@@ -399,6 +407,8 @@ class App(customtkinter.CTk):
             self.textbox.insert("insert", self.checkbox_A_EN.get() + "\n")   # type: ignore
         if self.checkbox_H_EN.get() == "hessian":
             self.textbox.insert("insert", self.checkbox_H_EN.get() + "\n")   # type: ignore
+        if self.checkbox_D_EN.get() == "distance":
+            self.textbox.insert("insert", self.checkbox_D_EN.get() + "\n")   # type: ignore
         
            
         
