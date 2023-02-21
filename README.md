@@ -30,19 +30,9 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
   ```
  
 
-* build inputfile generator 
-
-  ```sh
-  make Input
-  ```
 
 # Run 
 
-* The input file generator (CLI)
-
-  ```sh
-  ./ING "The input file name"
-  ```
 * Using Python code
 
   ```sh
