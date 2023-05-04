@@ -1,5 +1,6 @@
 import customtkinter
 import tkinter
+from tkinter import *
 from numpy import pi
 from math import sqrt
 from numpy import random
@@ -16,29 +17,28 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.geometry("1020x760")
+        self.geometry("1380x680")
         self.title("Thomson Input generator")
-        self.minsize(1020, 760)
-
-        #self.grid_rowconfigure(0, weight=1)
+        self.minsize(1380, 680)
 
         self.textbox = customtkinter.CTkTextbox(master=self , width = 500)
-        self.textbox.grid(row=0, column=1, padx=20, pady=(40, 20) , sticky="ns")
+        self.textbox.grid(row=0, column=2, padx=20, pady=(40, 20) , sticky="ns")
         self.textbox.configure(state='disabled')
-        
+
         self.tabview=customtkinter.CTkTabview(master=self)
-        self.tabview.grid(row=0,column=0,padx=20, columnspan=1 , pady=(20,20), sticky="ns")
+        self.tabview.grid(row=0,column=0,padx=20, columnspan=2 , pady=(20,20), sticky="ns")
         
         left = self.tabview.add("Custom")  
         right = self.tabview.add("Preload")  
+        
         self.tabview.set("Custom")
       
         
         self.continer1 = customtkinter.CTkFrame(master=left)
-        self.continer1.grid(row = 0 , column=0, padx=20, columnspan=1 , pady=(20,20), sticky="ns")
+        self.continer1.grid(row = 0 , column=0, padx=20, columnspan=2 , pady=(20,20), sticky="ns")
         
         self.continer3 = customtkinter.CTkFrame(master=right)
-        self.continer3.grid(row = 0 , column=0, padx=20, columnspan=1 , pady=(20,20), sticky="ns")
+        self.continer3.grid(row = 0 , column=0, padx=20, columnspan=2 , pady=(20,20), sticky="ns")
         
         ####################################  tab one  ######################################################
         
@@ -137,21 +137,27 @@ class App(customtkinter.CTk):
         self.checkbox_D = customtkinter.CTkCheckBox(master=self.continer1, text="Show distance matrix", onvalue="distance", offvalue="")
         self.checkbox_D.grid(row=7 ,column=1,columnspan=3,  padx=10, pady=10 , sticky="w"  )
         
+        self.checkbox_FD = customtkinter.CTkCheckBox(master=self.continer1, text="Fixed density", onvalue="density", offvalue="")
+        self.checkbox_FD.grid(row=0 ,column=2,columnspan=3,  padx=20, pady=10 , sticky="w"  )
+        
+        self.label_FDT = customtkinter.CTkLabel(master=self.continer1 , text="(Ignore the box size)"  )
+        self.label_FDT.grid(row=0 ,column=3, padx=20, pady=10, sticky="nsew" )
+        
         
         ############################################################################################
         
         
         self.button_write = customtkinter.CTkButton(master=self.continer1, command=self.button_write_callback, text="Write")
-        self.button_write.grid(row=9, column=0 ,  padx=20, pady=(20,20), sticky="nsew")
+        self.button_write.grid(row=1, column=2 ,  padx=20, pady=(20,20), sticky="nsew")
         
         self.button_clear = customtkinter.CTkButton(master=self.continer1, command=self.button_clear_callback, text="Clear")
-        self.button_clear.grid(row=9, column=1 ,  padx=20, pady=(20,20), sticky="nsew")
+        self.button_clear.grid(row=1, column=3 ,  padx=20, pady=(20,20), sticky="nsew")
         
         self.button_save = customtkinter.CTkButton(master=self.continer1, command=self.button_save_callback, text="Save")
-        self.button_save.grid(row=11, column=0, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
+        self.button_save.grid(row=2, column=2, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
         
         self.button_run = customtkinter.CTkButton(master=self.continer1, command=self.button_run_callback, text="Run")
-        self.button_run.grid(row=12, column=0, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
+        self.button_run.grid(row=3, column=2, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
         
         
         self.tabview=customtkinter.CTkTabview(master=self)
@@ -240,20 +246,24 @@ class App(customtkinter.CTk):
         self.checkbox_S_EN = customtkinter.CTkCheckBox(master=self.continer3, text="Show All Result", onvalue="show", offvalue="")
         self.checkbox_S_EN.grid(row=7 ,column=0, padx=10, pady=10 , sticky="w"  )
         
+        self.checkbox_FD_EN = customtkinter.CTkCheckBox(master=self.continer3, text="Fixed density", onvalue="density", offvalue="")
+        self.checkbox_FD_EN.grid(row=0 ,column=2,columnspan=3,  padx=20, pady=10 , sticky="w"  )
+        
+        self.label_FDT_EN = customtkinter.CTkLabel(master=self.continer3 , text="(Ignore the box size)"  )
+        self.label_FDT_EN.grid(row=0 ,column=3, padx=20, pady=10, sticky="nsew" )
+        
         self.button_write_EN = customtkinter.CTkButton(master=self.continer3, command=self.button_write_EN_callback, text="Write")
-        self.button_write_EN.grid(row=9, column=0 ,  padx=20, pady=(20,20), sticky="nsew")
+        self.button_write_EN.grid(row=1, column=2 ,  padx=20, pady=(20,20), sticky="nsew")
         
         self.button_clear_EN = customtkinter.CTkButton(master=self.continer3, command=self.button_clear_EN_callback, text="Clear")
-        self.button_clear_EN.grid(row=9, column=1 ,  padx=20, pady=(20,20), sticky="nsew")
+        self.button_clear_EN.grid(row=1, column=3 ,  padx=20, pady=(20,20), sticky="nsew")
         
         self.button_save_EN = customtkinter.CTkButton(master=self.continer3, command=self.button_save_EN_callback, text="Save")
-        self.button_save_EN.grid(row=10, column=0, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
+        self.button_save_EN.grid(row=2, column=2, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
         
         self.button_run_EN = customtkinter.CTkButton(master=self.continer3, command=self.button_run_EN_callback, text="Run")
-        self.button_run_EN.grid(row=11, column=0, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
+        self.button_run_EN.grid(row=3, column=2, columnspan=3 ,  padx=20, pady=(0,20), sticky="nsew")
         
-
-
         self.Lx_EN.configure(state='disabled')
         self.Ly_EN.configure(state='disabled')
         self.Lz_EN.configure(state='disabled')
@@ -273,7 +283,8 @@ class App(customtkinter.CTk):
         self.textbox.insert("insert","box:  " + self.Lx.get("0.0", "end-1c")  +" "+ self.Ly.get("0.0", "end-1c") +"  "+ self.Lz.get("0.0", "end"))
 
         
-        
+        if self.checkbox_FD.get() == "density":
+            self.textbox.insert("insert", self.checkbox_FD.get() + "\n") # type: ignore
         if self.checkbox_R.get() == "random":
             self.textbox.insert("insert", self.checkbox_R.get() + "\n")   # type: ignore
         if self.checkbox_M.get() == "multiply":
@@ -295,7 +306,7 @@ class App(customtkinter.CTk):
             z = random.rand(int(self.electron_N.get("0.0", "end-1c")))
             if str(self.combobox.get()) == "3":
                 for i in range(int(self.electron_N.get("0.0", "end-1c"))):
-                    self.textbox.insert("insert", "  " + str(i+1) + "     " + str(x[i]).replace('[','  ').replace(']','  ') + "    " + str(y[i]).replace('[','  ').replace(']','  ') + "    " + str(z[i]).replace('[','  ').replace(']','  ') + "\n")  # type: ignore
+                    self.textbox.insert("insert", "  " + str(i+1)  + "     " + str(x[i]).replace('[','  ').replace(']','  ') + "    " + str(y[i]).replace('[','  ').replace(']','  ') + "    " + str(z[i]).replace('[','  ').replace(']','  ') + "\n")  # type: ignore
             elif str(self.combobox.get()) == "2":
                 for i in range(int(self.electron_N.get("0.0", "end-1c"))):
                     self.textbox.insert("insert", "  " + str(i+1) + "     " + str(x[i]).replace('[','  ').replace(']','  ') + "    " + str(y[i]).replace('[','  ').replace(']','  ') + "\n")  # type: ignore                
@@ -401,6 +412,11 @@ class App(customtkinter.CTk):
         self.textbox.insert("insert",self.itermax_N_EN.get("0.0", "end-1c")   +"\t"+"# The maximum number of iteration" + "\n")
         self.textbox.insert("insert","box:  " + self.Lx_EN.get("0.0", "end-1c")  +"  "+ self.Ly_EN.get("0.0", "end-1c") +"  "+ self.Lz_EN.get("0.0", "end"))
         
+        if self.checkbox_FD_EN.get() == "density":
+            if self.combobox_CS.get() == "HEX (2D)":
+                self.textbox.insert("insert", self.checkbox_FD_EN.get() +" rectangle"+ "\n")   # type: ignore
+            else:
+                self.textbox.insert("insert", self.checkbox_FD_EN.get() + "\n")   # type: ignore
         if self.checkbox_S_EN.get() == "show":
             self.textbox.insert("insert", self.checkbox_S_EN.get() + "\n")   # type: ignore  
         if self.checkbox_A_EN.get() == "animation":

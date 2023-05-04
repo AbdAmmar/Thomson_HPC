@@ -9,6 +9,7 @@ program Thomson
  integer                          :: i 
  integer                          :: n_ele
  integer                          :: space 
+ integer                          :: nlines
  integer                          :: iter , itermax
   
  ! ----  dp  ---- !
@@ -29,6 +30,7 @@ program Thomson
  
  character (len = 20 )           :: arg , typ , multi 
  character (len = 20 )           :: show , hess , distance , animation
+ character (len = 20 )           :: origin 
 !-----------------------------------------------------------------------------------!
  
 !------------------------------------------------------------------------------------! 
@@ -47,12 +49,15 @@ program Thomson
  
     ! ----- Read from input file  ----- !
   
-    call read_f(arg,space,n_ele,tol,itermax,Lx,Ly,Lz,typ,multi,show,hess,distance,animation)
+    call read_f(arg,space,n_ele,tol,itermax,Lx,Ly,Lz,typ,multi,show,hess,distance,animation,origin,nlines)
   
+    print*, Lx,Ly,Lz 
+    
     ! ----- The Title ----- ! 
   
     call title(n_ele,space,itermax,typ,Lx,Ly,Lz)
 
+     
     ! ---- ! memory allocation ! --- !
     
     allocate                   (geo(n_ele,space))
@@ -73,7 +78,7 @@ program Thomson
     
     ! ----- Generate first geometry ----- !
     
-    call first_geo(arg,n_ele,space,Lx,Ly,Lz,typ,multi,geo)
+    call first_geo(arg,n_ele,space,Lx,Ly,Lz,typ,multi,geo,nlines)
     
     write(*,*) ""
     write(*,'(a)') "                                       ((  The starting Geometry  ))  "
@@ -122,9 +127,10 @@ program Thomson
       write(*,'(a)') ""
     end if 
     
-    open(4,file='data_frame.dat',status = 'replace')
-    open(8,file='energy.dat'    ,status = 'replace')
-    
+    if (animation == "animation") then 
+      open(4,file='data_frame.dat',status = 'replace')
+      open(8,file='energy.dat'    ,status = 'replace')
+    end if 
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
     ! ---- ! the main loop ! ---- ! 
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
@@ -223,7 +229,7 @@ program Thomson
     end if
     
     if (animation == "animation") then 
-      call anim(n_ele,space,geo,E,iter)
+      call anim(n_ele,space,geo,E,iter,origin,Lx,Ly,Lz)
     end if 
     
     end do 
@@ -231,9 +237,9 @@ program Thomson
     if (show /= "show") then 
     
       write(*,'(a)') ""
-      write(*,'(a)') "The geometry after the optimization:"
+      write(*,'(a)') "The final geometry after the optimization:"
       call print_geo(n_ele,space,geo)
-    
+            
     end if 
     
     
@@ -256,9 +262,11 @@ program Thomson
     
     call diagonalize_matrix(n_ele*space,H,Eign)
     
-    close(4)
-    close(8)
-  
+    if (animation == "animation") then 
+      close(4)
+      close(8)
+    end if 
+    
     if (animation == "animation") then 
       call plot_anim(n_ele,space,iter,Lx,Ly,Lz)
       call system('gnuplot plot')
@@ -269,11 +277,12 @@ program Thomson
   
   
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  
+      
       call system('rm -rf fort.1')
       call system('rm -rf fort.3')
       call system('rm -rf fort.4')
       call system('rm -rf fort.8')
+      call system('rm -rf fort.5')
       call system('rm -rf functions.mod')
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

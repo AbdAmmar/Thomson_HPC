@@ -1,4 +1,4 @@
-subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an)
+subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
 
   implicit none 
   
@@ -9,7 +9,6 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an)
   ! ---- ! local  ! ---- !  
   
   integer                                    :: i 
-  integer                                    :: nlines
   character (len = 10 )                      :: boxa   , boxb 
   character (len = 10 )                      :: ranaa  , ranab
   character (len = 10 )                      :: multib , multia
@@ -24,10 +23,11 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an)
   
   ! ---- ! output ! ---- !  
   
-  integer, intent(out)                       :: D , N , iter 
+  integer              , intent(out)         :: D , N , iter , nlines
   double precision     , intent(out)         :: tol 
   double precision     , intent(out)         :: Lx , Ly , Lz
-  character (len = 20 ), intent(out)         :: ra , mu ,sh, he , de, an 
+  character (len = 20 ), intent(out)         :: ra , mu ,sh, he , de, an
+  character (len = 20 ), intent(out)         :: or
   
   ! ---- ! code  ! ---- !
   
@@ -35,7 +35,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an)
   
   nlines = 0
   
-  boxb   = "box"
+  boxb   = "box:"
   ranab  = "random"
   multib = "multiply"
   showb  = "show"
@@ -70,6 +70,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an)
     end if 
   end do
   2 close(1)
+
 
   
   open (1,file = arg)
@@ -146,10 +147,6 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an)
         
     end select
     
-  else
-    Lx = 2*pi
-    Ly = 2*pi
-    Lz = 2*pi
   end if 
   
    open (1,file = arg)
@@ -179,7 +176,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an)
     read (1,*,end=9) anima
       if (anima .EQ. animb) then
         backspace (1)
-        read  (1,*) an
+        read  (1,*) an , or
         close(1)
       end if 
     end do 
@@ -282,7 +279,7 @@ write(*,'(a)') ""
 
 end subroutine
 
-subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo)
+subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo,nlines)
       
   implicit none 
 
@@ -290,12 +287,13 @@ subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo)
   
   integer              , intent(in)          :: N  , D 
   double precision     , intent(in)          :: Lx , Ly , Lz 
-  character (len = 10 ), intent(in)          :: arg , mu , ra
+  character (len = 20 ), intent(in)          :: arg , mu , ra
+  integer              , intent(in)          :: nlines 
   
   ! ---- ! local  ! ---- !  
 
   integer                                    :: i , k 
-  integer                                    :: nlines , null 
+  integer                                    :: null 
   character (len = 10 )                      :: geob , geoa
   
   
@@ -304,41 +302,32 @@ subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo)
   double precision      , intent(out)        :: geo(N,D)
   
   ! ---- ! code  ! ---- !
-  
-  
-  
+    
+    
+      
   if (ra == "random") then 
     call random_number(geo)
   else
-    
-    nlines = 0 
-    geob  = "geometry"
-    
-  open (1, file = arg)
-  do
-    read (1,*, end=1)
-    nlines = nlines + 1
-  end do 
-  1 close (1)
   
+  geob   = "geometry"  
   
-  open (1,file = arg)
-  
+  open (5,file = arg)
+        
   do i=1,nlines
-    read (1,*,end=2) geoa
+    read (5,*,end=2) geoa
       if (geoa .EQ. geob) then
-        backspace (1)
-        read  (1,*) geoa
+        backspace (5)
+        read  (5,*) geoa
           do k = 1,N
             if      (D == 3) then 
-                read  (1,*)  null , geo(k,1) , geo(k,2) , geo(k,3)   
+                read  (5,*)  null , geo(k,1) , geo(k,2) , geo(k,3)   
             else if (D == 2) then 
-                read  (1,*)  null , geo(k,1) , geo(k,2)
+                read  (5,*)  null , geo(k,1) , geo(k,2)
             else if (D == 1) then
-                read  (1,*)  null , geo(k,1) 
+                read  (5,*)  null , geo(k,1) 
             end if 
           end do 
-          close(1)
+          close(5)
       end if 
   end do
     
@@ -736,24 +725,77 @@ subroutine PBC(N,D,X,Lx,Ly,Lz)
   
   endsubroutine
   
-  subroutine anim(N,D,X,E,iter)
+  subroutine anim(N,D,X,E,iter,or,Lx,Ly,Lz)
   
   ! Input variables
 
   integer,intent(in)            :: N , D , iter 
-  double precision ,intent(in)  :: X(N*D,N*D) 
+  double precision ,intent(in)  :: X(N,D) 
   double precision ,intent(in)  :: E 
+  double precision ,intent(in)  :: Lx,Ly,Lz 
+  character(len=20),intent(in)  :: or  
+  
+  ! local 
+  
+  integer                       :: i 
+  double precision              :: Xb(N,D)
+  
+  
   
   if (iter .ne. 1) then 
-  if     (D == 3) then 
-    write(4,'(10000(1x,f12.8))') X(:, 1),X(:, 2),X(:,3)
-    write(8,'(f24.18)') E
+  
+  if     (D == 3) then
+  
+    if (or == "origin") then 
+      Xb(:,1) = X(:,1) - X(1,1)
+      Xb(:,2) = X(:,2) - X(1,2)
+      Xb(:,3) = X(:,3) - X(1,3)
+      do i = 1 , N 
+        if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx 
+        if (Xb(i,1) >= Lx) Xb(i,1) = Xb(i,1) - Lx
+        if (Xb(i,2) < 0)   Xb(i,2) = Xb(i,2) + Ly 
+        if (Xb(i,2) >= Ly) Xb(i,2) = Xb(i,2) - Ly
+        if (Xb(i,3) < 0)   Xb(i,3) = Xb(i,3) + Lz 
+        if (Xb(i,3) >= Lz) Xb(i,3) = Xb(i,3) - Lz
+      end do
+      write(4,'(10000(1x,f12.8))') Xb(:, 1),Xb(:, 2),Xb(:,3)
+      write(8,'(f24.18)') E
+      else 
+      write(4,'(10000(1x,f12.8))') X(:, 1),X(:, 2),X(:,3)
+      write(8,'(f24.18)') E
+    end if 
+    
   elseif (D == 2) then
+    if (or == "origin") then 
+      Xb(:,1) = X(:,1) - X(1,1)
+      Xb(:,2) = X(:,2) - X(1,2)
+    do i = 1 , N 
+        if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx 
+        if (Xb(i,1) >= Lx) Xb(i,1) = Xb(i,1) - Lx
+        if (Xb(i,2) < 0)   Xb(i,2) = Xb(i,2) + Ly 
+        if (Xb(i,2) >= Ly) Xb(i,2) = Xb(i,2) - Ly
+    end do 
+    write(4,'(10000(1x,f12.8))') Xb(:, 1),Xb(:, 2)
+    write(8,'(f24.18)') E
+    else 
     write(4,'(10000(1x,f12.8))') X(:, 1),X(:, 2)
     write(8,'(f24.18)') E
+    end if 
+    
   elseif (D == 1) then
+    if (or == "origin") then
+      Xb(:,1) = X(:,1) - X(1,1)
+    do i = 1, N 
+      if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx 
+      if (Xb(i,1) >= Lx) Xb(i,1) = Xb(i,1) - Lx
+    end do 
+    write(4,'(10000(1x,f12.8))') Xb(:, 1)
+    write(8,'(f24.18)') E
+    else
     write(4,'(10000(1x,f12.8))') X(:, 1)
     write(8,'(f20.12)') E
+    end if
+    
   end if
   else  
   if     (D == 3) then 
@@ -778,6 +820,9 @@ subroutine PBC(N,D,X,Lx,Ly,Lz)
 
   integer,intent(in)            :: N , D , iter 
   double precision, intent(in)  :: Lx, Ly , Lz 
+  character(len=25)             :: name1,name2
+  integer                       :: i , b 
+  
   
   if (iter .ne. 1) then
     write(*,'(a)') "____________________________________________________________________________________________"
@@ -812,46 +857,115 @@ subroutine PBC(N,D,X,Lx,Ly,Lz)
       write(9,'(a)') 'set xtics nomirror'
       write(9,'(a)') 'set yrange [0:1]'
     end if  
-    write(9,'(a)') 'set grid'
+    write(9,'(a)') 'set grid' 
     write(9,'(a,I4)') 'N=' , N
-    if (iter > 500) then 
-    write(9,'(a,I5,a)') 'do for [i=1:',400,']{'
+    if (iter > 1000) then 
+    b = 1000 
     else 
-    write(9,'(a,I5,a)') 'do for [i=1:',iter-2,']{'
+    b = iter -2  
     end if 
+    write(9,'(a,I5,a)') 'do for [i=1:',b,']{'
     write(9,'(a)') 'set output "tmp/image.".i.".png"'
     write(9,'(a)') "x = getValue(i,1,'energy.dat')"
     
     if      (D == 3) then 
       write(9,'(a,f16.10,a,f16.10,a,f16.10,a)') "set label sprintf('Energy = %16.10f', x*1.0)&
-                                                 &at",1.1*Lx,",",1.1*Ly,",",1.1*Lz,"  center font ',18'"
+                                                 &at screen 0.8,0.9  center font ',18'"
+      if (iter > 1000) then 
+        write(9,'(a,I4)') "set view 75, i*360/",b
+      else 
+        write(9,'(a,I4)') "set view 75, i*360/",b+360
+      end if 
       write(9,'(a,I4,a,I4,a,I4,a)') "splot for [j=1:",N,"] 'data_frame.dat'&
                                      & u (column(j)):(column(",N,"+j)):(column(",2*N,"+j)) every ::i::i w p pt 7 ps 3 notitle"
     else if (D == 2) then 
-      write(9,'(a,f16.10,a,f16.10,a,f16.10,a)') "set label sprintf('Energy = %16.10f', x*1.0)&
-                                                 &at",1.15*Lx,",",Ly-0.1,",",Lz+0.3,"  center font ',18'"
+      write(9,'(a)') "set label sprintf('Energy = %16.10f', x*1.0) at screen 0.9,0.9  center font ',18'"
       write(9,'(a,I4,a,I4,a)')      "p for [j=1:",N,"] 'data_frame.dat'&
                                      & u (column(j)):(column(",N,"+j)) every ::i::i w p pt 7 ps 3 notitle"
     else if (D == 1 ) then 
-      write(9,'(a,f16.10,a,f16.10,a,f16.10,a)') "set label sprintf('Energy = %16.10f', x*1.0)&
-                                                 &at",Lx/2.d0,",",Ly+0.9d0,",",Lz+0.3,"  center font ',18'"
+      write(9,'(a)') "set label sprintf('Energy = %16.10f', x*1.0) at screen 0.5,0.9  center font ',18'"
       write(9,'(a,I4,a,I4,a)')      "p for [j=1:",N,"] 'data_frame.dat'&
                                      & u j:(0) every ::i::i w p pt 7 ps 3 notitle"
     end if 
       write(9,'(a)') "clear"
       write(9,'(a)') "unset label"
       write(9,'(a)') "}"
-      write(9,'(a)') "system 'ffmpeg -y -nostats -loglevel 0 -f image2&
-                      & -r 30.0 -i tmp/image.%d.png -pix_fmt yuv420p -crf 1 animation.mp4'"
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      write(name1,'(I6,a,I6,a)') D,'D',N,'.mp4'
+      name2 = ""
+      do i=1,len(name1)   
+        if (name1(i:i).ne.' ')name2=trim(name2)//trim(name1(i:i))   
+      end do
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      write(9,'(a,a)') "system 'ffmpeg -y -nostats -loglevel 0 -f image2&
+                      & -r 30.0 -i tmp/image.%d.png -pix_fmt yuv420p -crf 1 ",name2
       write(9,'(a)') "system 'rm -rf tmp/'"
       close(9)
     else
-      write(*,'(a)') "____________________________________________________________________________________________"
-      write(*,'(a)') ""
-      write(*,'(a)') 'I can not provide you animation for one frame but i can give you a pic as png'
-      write(*,'(a)') "____________________________________________________________________________________________"
-      write(*,'(a)') ""
-      open(9,file='plot',status = 'replace')
+        
+        if      (D == 3) then 
+        
+        write(*,'(a)') "____________________________________________________________________________________________"
+        write(*,'(a)') "" 
+        write(*,'(a)') "Please wait for the animation"
+        write(*,'(a)') "____________________________________________________________________________________________"
+        write(*,'(a)') ""
+        open(9,file='plot',status = 'replace')
+        write(9,'(a)') 'set term png size 1920,1080'
+        write(9,'(a)') 'system "mkdir tmp"'
+        write(9,'(a)') "getValue(row,col,filename) = system('awk ''{if (NR == '.row.') print&
+                        & $'.col.'}'' '.filename.'')"
+        write(9,'(a,f16.10,a)') 'set xrange [0:',Lx,']'
+        write(9,'(a,f16.10,a)') 'set yrange [0:',Ly,']'
+        write(9,'(a,f16.10,a)') 'set zrange [0:',Lz,']'
+        write(9,'(a,f16.10,a)') 'set xtics ("0" 0,"L_x"',Lx,')'
+        write(9,'(a,f16.10,a)') 'set ytics       ("L_y"',Ly,')'
+        write(9,'(a,f16.10,a)') 'set ztics ("0" 0,"L_z"',Lz,')'
+        write(9,'(a)') 'set xtics offset 1,-1,0'
+        write(9,'(a)') 'set ytics offset 1,-1,0'
+        write(9,'(a)') 'set ztics offset 0,0,0'
+        write(9,'(a)') 'set xyplane relative 0'
+        write(9,'(a)') 'set view equal xyz'
+        write(9,'(a)') 'set border 4095'
+        write(9,'(a)') 'set grid'
+        write(9,'(a,I4)') 'N=' , N
+        write(9,'(a,I5,a)') 'do for [i=1:',300,']{'
+        write(9,'(a)') 'set output "tmp/image.".i.".png"'
+        write(9,'(a)') "x = getValue(1,1,'energy.dat')"
+        
+        write(9,'(a,f16.10,a,f16.10,a,f16.10,a)') "set label sprintf('Energy = %16.10f', x*1.0)&
+                                                 &at screen 0.8,0.9  center font ',18'"
+        write(9,'(a,I4)') "set view 75, i*360/",300                                         
+        write(9,'(a,I4,a,I4,a,I4,a)') "splot for [j=1:",N,"] 'data_frame.dat'&
+                              & u (column(j)):(column(",N,"+j)):(column(",2*N,"+j)) w p pt 7 ps 3 notitle"
+        write(9,'(a)') "clear"
+        write(9,'(a)') "unset label"
+        write(9,'(a)') "}"
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        write(name1,'(I6,a,I6,a)') D,'D',N,'.mp4'
+        name2 = ""
+        do i=1,len(name1)   
+          if (name1(i:i).ne.' ')name2=trim(name2)//trim(name1(i:i))   
+        end do
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        write(9,'(a,a)') "system 'ffmpeg -y -nostats -loglevel 0 -f image2&
+                        & -r 30.0 -i tmp/image.%d.png -pix_fmt yuv420p -crf 1 ",name2
+        write(9,'(a)') "system 'rm -rf tmp/'"
+        
+        else if (D == 2) then 
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        write(name1,'(a,I6,a,I6,a)') '"',D,'D',N,'.png"'
+        name2 = ""
+        do i=1,len(name1)   
+          if (name1(i:i).ne.' ')name2=trim(name2)//trim(name1(i:i))   
+        end do
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        write(*,'(a)') "____________________________________________________________________________________________"
+        write(*,'(a)') ""
+        write(*,'(a)') 'I can not provide you animation for one frame but i can give you a pic as png'
+        write(*,'(a)') "____________________________________________________________________________________________"
+        write(*,'(a)') ""
+        open(9,file='plot',status = 'replace')
         write(9,'(a)') 'set term png size 1920,1080'
         write(9,'(a,f16.10,a)') 'set xrange [0:',Lx,']'
         write(9,'(a,f16.10,a)') 'set yrange [0:',Ly,']'
@@ -859,40 +973,53 @@ subroutine PBC(N,D,X,Lx,Ly,Lz)
         write(9,'(a,f16.10,a)') 'set xtics ("0" 0,"L_x"',Lx,')'
         write(9,'(a,f16.10,a)') 'set ytics       ("L_y"',Ly,')'
         write(9,'(a,f16.10,a)') 'set ztics ("0" 0,"L_z"',Lz,')'
-      if      (D == 3) then 
-        write(9,'(a)') 'set xtics offset 1,-1,0'
-        write(9,'(a)') 'set ytics offset 1,-1,0'
-        write(9,'(a)') 'set ztics offset 0,0,0'
-        write(9,'(a)') 'set xyplane relative 0'
-        write(9,'(a)') 'set view equal xyz'
-        write(9,'(a)') 'set border 4095'
-      else if (D == 2) then 
-        write(9,'(a)') 'set size square'
-      else if (D == 1) then
+         write(9,'(a)') 'set size ratio -1'
+        write(9,'(a)') 'set grid'
+        write(9,'(a,I4)') 'N=' , N
+        write(9,'(a,a)') 'set output ',name2
+        write(9,'(a)') "getValue(row,col,filename) = system('awk ''{if (NR == '.row.') print&
+                        &$'.col.'}'' '.filename.'')"
+        write(9,'(a)') "x = getValue(1,1,'energy.dat')"
+        
+        write(9,'(a)') "set label sprintf('Energy = %16.10f', x*1.0)&
+                                                 &at screen 0.9,0.9  center font ',18'"
+        write(9,'(a,I4,a,I4,a,I4,a)') "plot for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)) w p pt 7 ps 3 notitle"
+        
+        else if (D == 1 ) then 
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        write(name1,'(a,I6,a,I6,a)') '"',D,'D',N,'.png"'
+        name2 = ""
+        do i=1,len(name1)   
+          if (name1(i:i).ne.' ')name2=trim(name2)//trim(name1(i:i))   
+        end do
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        write(*,'(a)') "____________________________________________________________________________________________"
+        write(*,'(a)') ""
+        write(*,'(a)') 'I can not provide you animation for one frame but i can give you a pic as png'
+        write(*,'(a)') "____________________________________________________________________________________________"
+        write(*,'(a)') ""
+        open(9,file='plot',status = 'replace')
+        write(9,'(a)') 'set term png size 1920,1080'
+        write(9,'(a,f16.10,a)') 'set xrange [0:',Lx,']'
+        write(9,'(a,f16.10,a)') 'set yrange [0:',Ly,']'
+        write(9,'(a,f16.10,a)') 'set zrange [0:',Lz,']'
+        write(9,'(a,f16.10,a)') 'set xtics ("0" 0,"L_x"',Lx,')'
+        write(9,'(a,f16.10,a)') 'set ytics       ("L_y"',Ly,')'
+        write(9,'(a,f16.10,a)') 'set ztics ("0" 0,"L_z"',Lz,')'
         write(9,'(a)') 'set size square'
         write(9,'(a)') 'set border 1'
         write(9,'(a)') 'unset ytics'
         write(9,'(a)') 'set xtics nomirror'
         write(9,'(a)') 'set yrange [0:1]'
-      end if
         write(9,'(a)') 'set grid'
         write(9,'(a,I4)') 'N=' , N
-        write(9,'(a)') 'set output "figure.png"'
+        write(9,'(a,a)') "set output ",name2
         write(9,'(a)') "getValue(row,col,filename) = system('awk ''{if (NR == '.row.') print&
                         &$'.col.'}'' '.filename.'')"
         write(9,'(a)') "x = getValue(1,1,'energy.dat')"
-        if      (D == 3) then 
-        write(9,'(a,f16.10,a,f16.10,a,f16.10,a)') "set label sprintf('Energy = %16.10f', x*1.0)&
-                                                 &at",1.1*Lx,",",1.1*Ly,",",1.1*Lz,"  center font ',18'"
-        write(9,'(a,I4,a,I4,a,I4,a)') "splot for [j=1:",N,"] 'data_frame.dat'&
-                                       &u (column(j)):(column(",N,"+j)):(column(",2*N,"+j)) w p pt 7 ps 3 notitle"
-        else if (D == 2) then 
-        write(9,'(a,f16.10,a,f16.10,a,f16.10,a)') "set label sprintf('Energy = %16.10f', x*1.0)&
-                                                 &at",1.15*Lx,",",Ly-0.1,",",Lz+0.3,"  center font ',18'"
-        write(9,'(a,I4,a,I4,a,I4,a)') "plot for [j=1:",N,"] 'data_frame.dat' u (column(j)):(column(",N,"+j)) w p pt 7 ps 3 notitle"
-        else if (D == 1 ) then 
-        write(9,'(a,f16.10,a,f16.10,a,f16.10,a)') "set label sprintf('Energy = %16.10f', x*1.0)&
-                                                   &at",Lx/2.d0,",",Ly+0.9d0,",",Lz+0.3,"  center font ',18'"
+        
+        
+        write(9,'(a,a)') "set label sprintf('Energy = %16.10f', x*1.0) at screen 0.5,0.9  center font ',18'"
         write(9,'(a,I4,a,I4,a,I4,a)') "plot for [j=1:",N,"] 'data_frame.dat'&
                                        &u j:(0) w p pt 7 ps 3 notitle"
         end if 
