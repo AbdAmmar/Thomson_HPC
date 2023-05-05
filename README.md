@@ -31,6 +31,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#example">Example</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -95,7 +96,9 @@ python Thomson.py
 ./Thomson "The input file name"
 ```
   
-* there are some example of the inputfile in the example folder you can use anyone of them or make your input
+# Example
+
+there are some example of the inputfile in the [examples folder]() you can try to use them.
   
 ## Contact
 
