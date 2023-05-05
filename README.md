@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://https://github.com/ALRAKIK/Thomson">
-    <img src="src/logo.png" alt="Logo" width="120" height="120">
+    <img src="src/logo.png" alt="Logo" width="140" height="140">
   </a>
 
   <h3 align="center">Thomson Project</h3>
