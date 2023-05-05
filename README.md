@@ -1,11 +1,4 @@
 
-
-
-
-# Thomson
-Thomson is program to solve thomson problem in torus in one,two and three dimension based on FORTAN90
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://https://github.com/ALRAKIK/Thomson">
@@ -15,7 +8,7 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
   <h3 align="center">Thomson Project</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Solve Thomson problem in tours in one, two and three dimension
     <br />
     <a href="https://github.com/ALRAKIK/Thomson"><strong>Explore the Project »</strong></a>
     <br />
@@ -23,6 +16,8 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
   </p>
 </div>
 
+# Thomson
+Thomson is program to solve thomson problem in torus in one,two and three dimension based on FORTAN90
 
 ![Screenshot](src/GUI.png)
 
