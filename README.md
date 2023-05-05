@@ -110,7 +110,7 @@ there are some example of the inputfile in the [examples folder](https://github.
 
 Stefano Evangelisti - stefano.lcpq@gmail.com
 
-Amer Alrakik - alrakikamer@gmail.com
+Amer Alrakik        - alrakikamer@gmail.com
 
 Project Link: [https://github.com/ALRAKIK/Thomson](https://github.com/ALRAKIK/Thomson)
 
