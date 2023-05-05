@@ -98,7 +98,7 @@ python Thomson.py
   
 # Example
 
-there are some example of the inputfile in the [examples folder]() you can try to use them.
+there are some example of the inputfile in the [examples folder](https://github.com/ALRAKIK/Thomson/tree/main/example) you can try to use them.
   
 ## Contact
 
