@@ -12,24 +12,19 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
     <img src="src/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Thomson Project</h3>
 
   <p align="center">
     An awesome README template to jumpstart your projects!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/ALRAKIK/Thomson"><strong>Explore the Project »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
   </p>
 </div>
 
 
-![Screenshot](GUI.png)
+![Screenshot](src/GUI.png)
 
 # Prerequisite
 * compiler (gfortran recommended):
