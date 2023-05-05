@@ -24,15 +24,15 @@
       <a href="#thomson">About The Project</a>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#prerequisite">Getting Started</a>
       <ul>
         <li><a href="#prerequisite">Prerequisites</a></li>
-        <li><a href="#build">Installation</a></li>
+        <li><a href="#build">Build</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -82,7 +82,7 @@ make Thomson
 ```sh
 make clean
 ```
-# Run 
+# Usage 
 
 * Using Python code
 
