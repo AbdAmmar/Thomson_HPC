@@ -8,7 +8,7 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a href="https://https://github.com/ALRAKIK/Thomson/src">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
