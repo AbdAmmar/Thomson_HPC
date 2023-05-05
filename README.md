@@ -120,4 +120,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 # Acknowledgments
 
-Special thanks go to Prof.Arjan Berger and Rony J. Letona for your ideas and help.
+Special thanks go to Prof. Arjan Berger and Rony J. Letona for your ideas and help.
