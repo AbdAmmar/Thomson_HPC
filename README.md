@@ -1,7 +1,7 @@
 
 <br />
 <div align="center">
-  <a href="https://https://github.com/ALRAKIK/Thomson">
+  <a href="https://github.com/ALRAKIK/Thomson">
     <img src="src/logo.png" alt="Logo" width="140" height="140">
   </a>
 
