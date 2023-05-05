@@ -39,7 +39,13 @@
 </details>
 
 # Thomson
-Thomson is program to solve thomson problem in torus in one,two and three dimension based on FORTAN90
+The Thomson problem is a classic problem in physics and mathematics that deals with finding the minimum energy configuration of a collection of point charges (electrons) on the surface of a sphere. The problem was first proposed by the physicist J.J. Thomson in 1904, and it has been studied extensively since then.
+
+The Thomson problem has many applications in physics and chemistry, including the study of atomic and molecular structures. The problem is also of interest in mathematics and computer science, as it involves finding the optimal arrangement of a large number of points in three-dimensional space.
+
+Thomson program has been developed to solve the Thomson problem inside the torus. This program uses Conjucated gradient mathematical technique and computational algorithms to find the optimal configuration of charges on the surface of a torus, which is a doughnut-shaped object.
+
+The program written from scratch using FORTRAN 90 language with GUI using python3 to help the user making the input files and running the program.
 
 ![Screenshot](src/GUI.png)
 
