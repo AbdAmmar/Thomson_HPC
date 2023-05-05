@@ -45,7 +45,7 @@ The Thomson problem has many applications in physics and chemistry, including th
 
 Thomson program has been developed to solve the Thomson problem inside the torus. This program uses Conjucated gradient mathematical technique and computational algorithms to find the optimal configuration of charges on the surface of a torus, which is a doughnut-shaped object.
 
-The program written from scratch using FORTRAN 90 language with GUI using python3 to help the user making the input files and running the program.
+The program written using FORTRAN 90 language with Python3 GUI to help the user making the input files and running the program.
 
 ![Screenshot](src/GUI.png)
 
