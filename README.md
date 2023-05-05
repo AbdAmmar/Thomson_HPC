@@ -8,7 +8,7 @@
   <h3 align="center">Thomson Project</h3>
 
   <p align="center">
-    Solve Thomson problem in tours in one, two and three dimension
+    Solve Thomson problem in Clifford tori for one, two and three dimension
     <br />
     <a href="https://github.com/ALRAKIK/Thomson"><strong>Explore the Project »</strong></a>
     <br />
@@ -38,7 +38,7 @@
   </ol>
 </details>
 
-# Thomson
+# Thomson 
 The Thomson problem is a classic problem in physics and mathematics that deals with finding the minimum energy configuration of a collection of point charges (electrons) on the surface of a sphere. The problem was first proposed by the physicist J.J. Thomson in 1904, and it has been studied extensively since then.
 
 The Thomson problem has many applications in physics and chemistry, including the study of atomic and molecular structures. The problem is also of interest in mathematics and computer science, as it involves finding the optimal arrangement of a large number of points in three-dimensional space.
@@ -110,6 +110,8 @@ there are some example of the inputfile in the [examples folder](https://github.
 
 Stefano Evangelisti - stefano.lcpq@gmail.com
 
+Arjan Berger - arjan.berger@irsamc.ups-tlse.fr
+
 Amer Alrakik - alrakikamer@gmail.com
 
 Project Link: [https://github.com/ALRAKIK/Thomson](https://github.com/ALRAKIK/Thomson)
@@ -120,4 +122,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 # Acknowledgments
 
-Special thanks go to Prof. Arjan Berger for his ideas and help.
+Thanks to ... 
