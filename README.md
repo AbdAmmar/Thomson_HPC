@@ -43,66 +43,60 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
 ![Screenshot](src/GUI.png)
 
 # Prerequisite
+
 * 1 - Fortran compiler (gfortran recommended):
 
-  ```sh
-  sudo apt install gfortran
-  ```
+```
+sudo apt install gfortran
+```
 * 2 - Fortran library (llapack, openmp):
   
-  ```sh
-  sudo apt-get install liblapack-dev libopenblas-dev libomp-dev
-  ```
+```
+sudo apt-get install liblapack-dev libopenblas-dev libomp-dev
+```
 * 3 - For animation (gnuplot, FFmpeg):
 
-  ```sh
-  sudo apt-get install gnuplot ffmpeg
-  ```
+```
+sudo apt-get install gnuplot ffmpeg
+```
 * 4 - Python (Python 3, not working using python 2 because it need some library )
 
- ```sh
-  sudo apt-get install python3 
- ```
- * 5 - Python library using pip
+```
+sudo apt-get install python3 
+```
+* 5 - Python library (numpy,tkinter,customtkinter) to use the python GUI
 
- ```sh
-  sudo apt-get install python3 
- ```
+```
+pip3 install customtkinter tkinter numpy 
+```
 
-
-
-
-
-
-
-  
+ 
 # Build
 
 * build the program
   
-  ```sh
-  make Thomson
-  ```
- 
-
-
+```sh
+make Thomson
+```
+* clean the bin files
+```sh
+make clean
+```
 # Run 
 
 * Using Python code
 
-  ```sh
-   python Thomson.py
-  ``` 
+```sh
+python Thomson.py
+``` 
 * Thomson
 
-  ```sh
-  ./Thomson "The input file name"
-  ```
+```sh
+./Thomson "The input file name"
+```
   
 * there are some example of the inputfile in the example folder you can use anyone of them or make your input
   
-  
-<!-- CONTACT -->
 ## Contact
 
 Stefano Evangelisti - stefano.lcpq@gmail.com
