@@ -43,22 +43,38 @@ Thomson is program to solve thomson problem in torus in one,two and three dimens
 ![Screenshot](src/GUI.png)
 
 # Prerequisite
-* compiler (gfortran recommended):
+* 1 - Fortran compiler (gfortran recommended):
 
   ```sh
   sudo apt install gfortran
   ```
-* library (llapack, openmp):
+* 2 - Fortran library (llapack, openmp):
   
   ```sh
   sudo apt-get install liblapack-dev libopenblas-dev libomp-dev
   ```
-* for animation (gnuplot, FFmpeg):
+* 3 - For animation (gnuplot, FFmpeg):
 
   ```sh
   sudo apt-get install gnuplot ffmpeg
   ```
-  
+* 4 - Python (Python 3, not working using python 2 because it need some library )
+
+ ```sh
+  sudo apt-get install python3 
+ ```
+ * 5 - Python library using pip
+
+ ```sh
+  sudo apt-get install python3 
+ ```
+
+
+
+
+
+
+
   
 # Build
 
@@ -94,3 +110,7 @@ Stefano Evangelisti - stefano.lcpq@gmail.com
 Amer Alrakik - alrakikamer@gmail.com
 
 Project Link: [https://github.com/ALRAKIK/Thomson](https://github.com/ALRAKIK/Thomson)
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
