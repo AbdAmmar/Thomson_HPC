@@ -80,7 +80,8 @@ sudo apt-get install python3 python3-pip
 * 5 - Python library (numpy,tkinter,customtkinter) to use the python GUI
 
 ```
-pip3 install customtkinter tkinter numpy 
+sudo apt-get install python3-tk
+pip3 install customtkinter numpy 
 ```
 
  
