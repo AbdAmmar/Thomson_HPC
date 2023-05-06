@@ -17,9 +17,9 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.geometry("1380x680")
+        self.geometry("1400x700")
         self.title("Thomson Input generator")
-        self.minsize(1380, 680)
+        self.minsize(1400, 700)
 
         self.textbox = customtkinter.CTkTextbox(master=self , width = 500)
         self.textbox.grid(row=0, column=2, padx=20, pady=(40, 20) , sticky="ns")
@@ -140,9 +140,8 @@ class App(customtkinter.CTk):
         self.checkbox_FD = customtkinter.CTkCheckBox(master=self.continer1, text="Fixed density", onvalue="density", offvalue="")
         self.checkbox_FD.grid(row=0 ,column=2,columnspan=3,  padx=20, pady=10 , sticky="w"  )
         
-        self.label_FDT = customtkinter.CTkLabel(master=self.continer1 , text="(Ignore the box size)"  )
+        self.label_FDT = customtkinter.CTkLabel(master=self.continer1 , text="one electron per unit of length \n(Ignore the box size)"  )
         self.label_FDT.grid(row=0 ,column=3, padx=20, pady=10, sticky="nsew" )
-        
         
         ############################################################################################
         
@@ -249,7 +248,7 @@ class App(customtkinter.CTk):
         self.checkbox_FD_EN = customtkinter.CTkCheckBox(master=self.continer3, text="Fixed density", onvalue="density", offvalue="")
         self.checkbox_FD_EN.grid(row=0 ,column=2,columnspan=3,  padx=20, pady=10 , sticky="w"  )
         
-        self.label_FDT_EN = customtkinter.CTkLabel(master=self.continer3 , text="(Ignore the box size)"  )
+        self.label_FDT_EN = customtkinter.CTkLabel(master=self.continer3 , text="one electron per unit of length \n(Ignore the box size)"  )
         self.label_FDT_EN.grid(row=0 ,column=3, padx=20, pady=10, sticky="nsew" )
         
         self.button_write_EN = customtkinter.CTkButton(master=self.continer3, command=self.button_write_EN_callback, text="Write")
