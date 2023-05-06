@@ -47,6 +47,12 @@ Thomson program has been developed to solve the Thomson problem inside the torus
 
 The program written using FORTRAN 90 language with Python3 GUI to help the user making the input files and running the program.
 
+We define the euclidean distance in the torus by the expression: 
+
+```math
+d_{i j}=\sqrt{\sum_{\alpha=1}^n\left[\frac{L_\alpha}{\pi} \sin \left(\frac{\pi}{L_\alpha}\left|x_{\alpha, i}-x_{\alpha, j}\right|\right)\right]^2}
+```
+
 ![Screenshot](src/GUI.png)
 
 # Prerequisite
