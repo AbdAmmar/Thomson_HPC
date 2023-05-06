@@ -75,7 +75,7 @@ sudo apt-get install gnuplot ffmpeg
 * 4 - Python (Python 3, not working using python 2 because it need some library )
 
 ```
-sudo apt-get install python3 
+sudo apt-get install python3 python3-pip
 ```
 * 5 - Python library (numpy,tkinter,customtkinter) to use the python GUI
 
