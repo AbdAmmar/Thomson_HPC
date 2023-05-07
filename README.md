@@ -57,7 +57,7 @@ d_{i j}=\sqrt{\sum_{\alpha=1}^n\left[\frac{L_\alpha}{\pi} \sin \left(\frac{\pi}{
 
 # Prerequisite
 
-* 1 - Fortran compiler (gfortran recommended):
+* 1 - Fortran compiler (gfortran 9.4 recommended):
 
 ```
 sudo apt install gfortran
