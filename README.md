@@ -123,7 +123,7 @@ then the user can add any keywords for the list (with any order) :
 
 | keywords                      | Description | 
 | :---:                         |     :---       |
-| `box: num num num`   | change the size of the box on x,y,z  "default $2\pi,2\pi,2\pi$" |
+| `box: number number number`   | change the size of the box on x,y,z  "default $2\pi,2\pi,2\pi$" |
 | `random`                      |  start from random geometry (every axis have a random number between  [0,1]  |
 | `multiply`                    | multiply the input geometry by the size of the box and distrubute the electron all over the box |
 | `show`                        | show all the result (the geometry in every step of iteration, energy of the system , and the norm of the gradient) |
