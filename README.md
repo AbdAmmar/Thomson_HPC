@@ -119,31 +119,25 @@ third line for the tolerance                            .
 
 fourth line for the maximum number of iteration         .
 
-then the user can add any keywords for the list:
+then the user can add any keywords for the list (with any order) :
 
-1  - box: number number number  (change the size of the box on x,y,z  "default $2\pi,2\pi,2\pi$")
+| keywords                      | Description | 
+| :---:                         |     :---       |
+| `box: number number number`   | change the size of the box on x,y,z  "default $2\pi,2\pi,2\pi$" |
+| `random`                      |  start from random geometry (every axis have a random number between  [0,1]  |
+| `multiply`                    | multiply the input geometry by the size of the box and distrubute the electron all over the box |
+| `show`                        | show all the result (the geometry in every step of iteration, energy of the system , and the norm of the gradient) |
+| `density`                     | choose a fixed density (one electron per the unit of length) and ignore the size of the box written before or after  |
+| `density rectangle`           | choose a fixed density (one electron per the unit of length) in case of 2D if user want to choose the ratio between the first and the second axis as $\sqrt(3)/2$  |
+| `hessian`                     | show the hessian matrix at the convergance |
+| `distance`                    | show the euclidean and the geodesic matrix at the convergance |
+| `animation`                   | make a video for the optimizations steps or if the user are at a fixed point (minimum or saddle point) gives a picture  |
+| `animation origin`            | same as animation but force one electron to be at the origin of the torus [0,0,0] |
 
-2  - random (to start from random geometry (every axis have a random number between  [0,1] ))
-
-3  - multiply  (to multiply the input geometry by the size of the box and distrubute the electron all over the box )
-
-4  - show  (to show all the result (the geometry in every step of iteration, energy of the system , and the norm of the gradient))
-
-5  - density (to choose a fixed density (one electron per the unit of length)) and ignore the size of the box written before or after 
-
-6  - density rectangle (to choose a fixed density (one electron per the unit of length)) in case of 2D if user want to choose the ratio between the first and the second axis as $\sqrt(3)/2$ 
-
-7  - hessian (to show the hessian matrix at the convergance)
-
-8  - distance (to show the euclidean and the geodesic matrix at the convergance)
-
-9  - animation (to make a video about the optimizations steps or if the user at a fixed point (minimum or saddle point) gives a picture)
-
-10 - animation origin (same as animation but force one electron to be at the origin of the torus [0,0,0])
-
-11 - geometry (the last keywork) , the user have to define the input geometry below it until he reach the last number of electron like this: 
+geometry (the last keywork) , user have to define the input geometry below it until he reach the last number of electron like this: 
 
 ```sh
+geomrtry
 1   number number number 
 2   number number number
 3   number number number
