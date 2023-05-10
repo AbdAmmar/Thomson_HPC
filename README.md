@@ -65,22 +65,22 @@ sudo apt install gfortran
 * 2 - Fortran library (llapack, openmp):
   
 ```
-sudo apt-get install liblapack-dev libopenblas-dev libomp-dev
+sudo apt install liblapack-dev libopenblas-dev libomp-dev
 ```
 * 3 - For animation (gnuplot, FFmpeg):
 
 ```
-sudo apt-get install gnuplot ffmpeg
+sudo apt install gnuplot ffmpeg
 ```
 * 4 - Python (Python 3, not working using python 2 because it need some library )
 
 ```
-sudo apt-get install python3 python3-pip
+sudo apt install python3 python3-pip
 ```
 * 5 - Python library (numpy,tkinter,customtkinter) to use the python GUI
 
 ```
-sudo apt-get install python3-tk
+sudo apt install python3-tk
 pip3 install customtkinter numpy 
 ```
 
@@ -111,36 +111,36 @@ python Thomson.py
 
 * Input file
 
-first line to identify the number of dimension  1,2 or 3.
+First line to identify the number of dimension  1,2 or 3.
 
-second line to identify the number of electrons         .
+Second line to identify the number of electrons         .
 
-third line for the tolerance                            .
+Third line for the tolerance                            .
 
-fourth line for the maximum number of iteration         .
+Fourth line for the maximum number of iteration         .
 
 then the user can add any keywords for the list (with any order) :
 
-| keywords                      | Description | 
-| :---:                         |     :---       |
-| `box: number number number`   | change the size of the box on x,y,z  "default $2\pi,2\pi,2\pi$" |
-| `random`                      |  start from random geometry (every axis have a random number between  [0,1]  |
-| `multiply`                    | multiply the input geometry by the size of the box and distrubute the electron all over the box |
-| `show`                        | show all the result (the geometry in every step of iteration, energy of the system , and the norm of the gradient) |
-| `density`                     | choose a fixed density (one electron per the unit of length) and ignore the size of the box written before or after  |
-| `density rectangle`           | choose a fixed density (one electron per the unit of length) in case of 2D if user want to choose the ratio between the first and the second axis as $\sqrt(3)/2$  |
-| `hessian`                     | show the hessian matrix at the convergance |
-| `distance`                    | show the euclidean and the geodesic matrix at the convergance |
-| `animation`                   | make a video for the optimizations steps or if the user are at a fixed point (minimum or saddle point) gives a picture  |
-| `animation origin`            | same as animation but force one electron to be at the origin of the torus [0,0,0] |
+| keywords                     | type  | Description | 
+| :---                         |  :--- |     :---       |
+| box: real real real        |`char`  `real` `real` `real` | change the size of the box on x,y,z  "default $2\pi,2\pi,2\pi$" |
+| random (optional)            |`char` |  start from random geometry (every axis have a random number between  [0,1]  |
+| multiply (optional)          |`char` | multiply the input geometry by the size of the box and distrubute the electron all over the box |
+| show (optional)              |`char` | show all the result (the geometry in every step of iteration, energy of the system , and the norm of the gradient) |
+| density (optional)           |`char` | choose a fixed density (one electron per the unit of length) and ignore the size of the box written before or after  |
+| density rectangle (optional) |`char` `char`| choose a fixed density (one electron per the unit of length) in case of 2D if user want to choose the ratio between the first and the second axis as $\sqrt(3)/2$  |
+| hessian (optional)           |`char` | show the hessian matrix at the convergance |
+| distance (optional)          |`char` | show the euclidean and the geodesic matrix at the convergance |
+| animation (optional)         |`char` | make a video for the optimizations steps or if the user are at a fixed point (minimum or saddle point) gives a picture  |
+| animation origin (optional)  |`char` `char` | same as animation but force one electron to be at the origin of the torus [0,0,0] |
 
 geometry (the last keywork) , user have to define the input geometry below it until he reach the last number of electron like this: 
 
 ```sh
-geomrtry
-1   number number number 
-2   number number number
-3   number number number
+geometry
+1   real real real 
+2   real real real
+3   real real real
 .
 .
 .
@@ -168,4 +168,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 # Acknowledgments
 
-Thanks to ... 
+Thanks to Miguel Escobar Azor [orcid](https://orcid.org/0000-0002-8090-0820)
