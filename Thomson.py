@@ -68,7 +68,7 @@ class App(customtkinter.CTk):
         self.tolerance_N.insert("0.0", "1e-8")
         
         
-        self.label_itermax = customtkinter.CTkLabel(master=self.continer1 , text=" Total number of iteration :"  )
+        self.label_itermax = customtkinter.CTkLabel(master=self.continer1 , text=" Max. number of iteration :"  )
         self.label_itermax.grid(row=3 ,column=0, padx=10, pady=5, sticky="nsew" )
         
         
@@ -191,7 +191,7 @@ class App(customtkinter.CTk):
         self.tolerance_N_EN.insert("0.0", "1e-8")
         
         
-        self.label_itermax_EN = customtkinter.CTkLabel(master=self.continer3 , text=" Total number of iteration :"  )
+        self.label_itermax_EN = customtkinter.CTkLabel(master=self.continer3 , text=" Max. number of iteration :"  )
         self.label_itermax_EN.grid(row=3 ,column=0, padx=10, pady=5, sticky="nsew" )
         
         
