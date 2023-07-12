@@ -33,7 +33,7 @@ program Thomson
  character (len = 20 )           :: origin 
 !-----------------------------------------------------------------------------------!
  
-!------------------------------------------------------------------------------------! 
+!-----------------------------------------------------------------------------------!
   
   call system('clear')
   if(command_argument_count().eq.0) then
@@ -151,7 +151,7 @@ program Thomson
       write(*,'(a)') "____________________________________________________________________________________________"
       write(*,'(a)') ""
       if (animation == "animation") then 
-        call anim(n_ele,space,geo,E,iter)
+        call anim(n_ele,space,geo,E,iter,origin,Lx,Ly,Lz)
       end if
       exit 
     end if 
@@ -226,9 +226,9 @@ program Thomson
       
     end if
     
-    if (animation == "animation") then 
+    if (animation == "animation") then
       call anim(n_ele,space,geo,E,iter,origin,Lx,Ly,Lz)
-    end if 
+    end if
     
     end do 
     

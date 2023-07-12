@@ -729,76 +729,76 @@ subroutine PBC(N,D,X,Lx,Ly,Lz)
   
   ! Input variables
 
-  integer,intent(in)            :: N , D , iter 
-  double precision ,intent(in)  :: X(N,D) 
-  double precision ,intent(in)  :: E 
-  double precision ,intent(in)  :: Lx,Ly,Lz 
-  character(len=20),intent(in)  :: or  
-  
-  ! local 
-  
-  integer                       :: i 
+  integer,intent(in)            :: N , D , iter
+  double precision ,intent(in)  :: X(N,D)
+  double precision ,intent(in)  :: E
+  double precision ,intent(in)  :: Lx,Ly,Lz
+  character(len=20),intent(in)  :: or
+
+  ! local
+
+  integer                       :: i
   double precision              :: Xb(N,D)
   
   
   
-  if (iter .ne. 1) then 
-  
+  if (iter .ne. 1) then
+
   if     (D == 3) then
-  
-    if (or == "origin") then 
+
+    if (or == "origin") then
       Xb(:,1) = X(:,1) - X(1,1)
       Xb(:,2) = X(:,2) - X(1,2)
       Xb(:,3) = X(:,3) - X(1,3)
-      do i = 1 , N 
-        if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx 
+      do i = 1 , N
+        if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx
         if (Xb(i,1) >= Lx) Xb(i,1) = Xb(i,1) - Lx
-        if (Xb(i,2) < 0)   Xb(i,2) = Xb(i,2) + Ly 
+        if (Xb(i,2) < 0)   Xb(i,2) = Xb(i,2) + Ly
         if (Xb(i,2) >= Ly) Xb(i,2) = Xb(i,2) - Ly
-        if (Xb(i,3) < 0)   Xb(i,3) = Xb(i,3) + Lz 
+        if (Xb(i,3) < 0)   Xb(i,3) = Xb(i,3) + Lz
         if (Xb(i,3) >= Lz) Xb(i,3) = Xb(i,3) - Lz
       end do
       write(4,'(10000(1x,f12.8))') Xb(:, 1),Xb(:, 2),Xb(:,3)
       write(8,'(f24.18)') E
-      else 
+      else
       write(4,'(10000(1x,f12.8))') X(:, 1),X(:, 2),X(:,3)
       write(8,'(f24.18)') E
-    end if 
-    
+    end if
+
   elseif (D == 2) then
-    if (or == "origin") then 
+    if (or == "origin") then
       Xb(:,1) = X(:,1) - X(1,1)
       Xb(:,2) = X(:,2) - X(1,2)
-    do i = 1 , N 
-        if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx 
+    do i = 1 , N
+        if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx
         if (Xb(i,1) >= Lx) Xb(i,1) = Xb(i,1) - Lx
-        if (Xb(i,2) < 0)   Xb(i,2) = Xb(i,2) + Ly 
+        if (Xb(i,2) < 0)   Xb(i,2) = Xb(i,2) + Ly
         if (Xb(i,2) >= Ly) Xb(i,2) = Xb(i,2) - Ly
-    end do 
+    end do
     write(4,'(10000(1x,f12.8))') Xb(:, 1),Xb(:, 2)
     write(8,'(f24.18)') E
-    else 
+    else
     write(4,'(10000(1x,f12.8))') X(:, 1),X(:, 2)
     write(8,'(f24.18)') E
-    end if 
-    
+    end if
+
   elseif (D == 1) then
     if (or == "origin") then
       Xb(:,1) = X(:,1) - X(1,1)
-    do i = 1, N 
-      if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx 
+    do i = 1, N
+      if (Xb(i,1) < 0)   Xb(i,1) = Xb(i,1) + Lx
       if (Xb(i,1) >= Lx) Xb(i,1) = Xb(i,1) - Lx
-    end do 
+    end do
     write(4,'(10000(1x,f12.8))') Xb(:, 1)
     write(8,'(f24.18)') E
     else
     write(4,'(10000(1x,f12.8))') X(:, 1)
     write(8,'(f20.12)') E
     end if
-    
+
   end if
-  else  
-  if     (D == 3) then 
+  else
+  if     (D == 3) then
     write(4,'(10000(1x,f16.8))') X(:, 1),X(:, 2),X(:,3)
     write(8,'(f24.18)') E
   elseif (D == 2) then
@@ -808,8 +808,8 @@ subroutine PBC(N,D,X,Lx,Ly,Lz)
     write(4,'(10000(1x,f16.8))') X(:, 1)
     write(8,'(f24.18)') E
   end if
-  end if 
-  
+  end if
+
   end subroutine
   
   subroutine plot_anim(N,D,iter,Lx,Ly,Lz)
