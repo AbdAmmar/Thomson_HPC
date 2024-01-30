@@ -23,3 +23,6 @@ clean:
 
 Thomson_d: 
 	$(GF90) src/*.f90 -o $(BIN) $(FFFLAGS) $(LIBS)
+ 
+Thomson_mpi:
+	mpif90 src/*.f90 -o $(BIN) $(FFLAGS) $(LIBS) 
