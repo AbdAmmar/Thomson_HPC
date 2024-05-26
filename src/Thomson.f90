@@ -2,9 +2,10 @@ program Thomson
 
   implicit none
 
-include 'mpif.h'
-
- ! ----------- !  variable declaration ! ----------- ! 
+#ifdef USE_MPI
+    include 'mpif.h'
+#endif
+ ! ----------- !  variable declaration ! ----------- !
  
  ! ----   i  ---- ! 
  
@@ -42,13 +43,17 @@ include 'mpif.h'
  integer                         :: ME             ! CPU index
  character(len=2)                :: Ncore
 
+#ifdef USE_MPI
+    call MPI_Init(ierr)
 
- call MPI_Init(ierr)
+    call MPI_Comm_size(MPI_COMM_WORLD,nprocs,ierr) ! Nombre of procs dispo
 
- call MPI_Comm_size(MPI_COMM_WORLD,nprocs,ierr) ! Nombre of procs dispo
-
- call MPI_Comm_rank(MPI_COMM_WORLD,ME,ierr)     ! Id de chaque proc
-  
+    call MPI_Comm_rank(MPI_COMM_WORLD,ME,ierr)     ! Id de chaque proc
+#else
+    ierr = 0
+    nprocs = 1        ! Assume single process execution
+    ME = 0            ! Assume single process execution
+#endif
   
 !-----------------------------------------------------------------------------------!  
   
@@ -72,6 +77,7 @@ include 'mpif.h'
     
   end if 
   
+#ifdef USE_MPI
   call MPI_Bcast(space  ,1,mpi_INTEGER,0,MPI_COMM_WORLD,ierr)
   call MPI_Bcast(n_ele  ,1,mpi_INTEGER,0,MPI_COMM_WORLD,ierr)
   call MPI_Bcast(itermax,1,mpi_INTEGER,0,MPI_COMM_WORLD,ierr)
@@ -90,7 +96,7 @@ include 'mpif.h'
   call MPI_Bcast(distance ,LEN(arg),mpi_CHARACTER,0,MPI_COMM_WORLD,ierr)
   call MPI_Bcast(animation,LEN(arg),mpi_CHARACTER,0,MPI_COMM_WORLD,ierr)
   call MPI_Bcast(origin   ,LEN(arg),mpi_CHARACTER,0,MPI_COMM_WORLD,ierr) 
-     
+#endif
     ! ---- ! memory allocation ! --- !
     
     allocate                   (geo(n_ele,space))
@@ -112,12 +118,15 @@ include 'mpif.h'
     ! ----- Generate first geometry ----- !
     
     call first_geo(arg,n_ele,space,Lx,Ly,Lz,typ,multi,geo,nlines)
-    
+
+#ifdef USE_MPI
     write(Ncore,'(I2)') ME
-    
     open(10,file='rand_'//Ncore//'.out')
-    
-    ! ----- The Title ----- ! 
+#else
+    open(10,file='rand.out')
+#endif
+
+    ! ----- The Title ----- !
     
     call title(n_ele,space,itermax,typ,Lx,Ly,Lz,10)
     
@@ -170,9 +179,14 @@ include 'mpif.h'
     end if 
     
     if (animation == "animation") then 
+#ifdef USE_MPI
       open(4,file='data_frame'//Ncore//'.dat',status = 'replace')
       open(8,file='energy'//Ncore//'.dat'    ,status = 'replace')
-    end if 
+#else
+      open(4,file='data_frame.dat',status = 'replace')
+      open(8,file='energy.dat'    ,status = 'replace')
+#endif
+    end if
     
     
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
@@ -337,9 +351,11 @@ include 'mpif.h'
   
   allocate(Energy_out(nprocs))
   
-  
+#ifdef USE_MPI
   call MPI_Gather(E, 1, MPI_DOUBLE_PRECISION, Energy_out, 1, MPI_DOUBLE_PRECISION, 0, MPI_COMM_WORLD, ierr)
-  
+#endif
+
+#ifdef USE_MPI
   if (ME == 0) then
     open(3,file='energy.dat')
         do i = 1,size(Energy_out)
@@ -347,7 +363,10 @@ include 'mpif.h'
         end do 
     close(3)
   end if
-  
+#endif
+
+#ifdef USE_MPI
   call MPI_Finalize(ierr)
-  
-end program 
+#endif
+
+end program
