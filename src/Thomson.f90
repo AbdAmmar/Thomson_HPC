@@ -17,19 +17,19 @@ program Thomson
   
  ! ----  dp  ---- !
  
- double precision                 :: Lx , Ly , Lz 
+ double precision                 :: Lx, Ly, Lz 
  double precision                 :: tol
  double precision                 :: E  
- double precision, allocatable    :: Eign         (:)
- double precision, allocatable    :: Energy_out   (:)
- double precision, allocatable    :: geo        (:,:)  
+ double precision                 :: beta(1,1), lambda(1,1)
+ double precision, allocatable    :: Eign(:)
+ double precision, allocatable    :: Energy_out(:)
+ double precision, allocatable    :: geo(:,:)  
  double precision, allocatable    :: dervative_b(:,:)
  double precision, allocatable    :: dervative_a(:,:)
- double precision, allocatable    :: conj_s     (:,:)
- double precision, allocatable    :: beta       (:,:)
- double precision, allocatable    :: lambda     (:,:)
- double precision, allocatable    :: H          (:,:)
- 
+ double precision, allocatable    :: conj_s(:,:)
+ double precision, allocatable    :: H(:,:)
+ double precision, allocatable    :: Hconj_s(:,:)
+
  ! ----  ch  ---- !
  
  character (len = 20 )           :: arg , typ , multi 
@@ -99,14 +99,13 @@ program Thomson
 #endif
     ! ---- ! memory allocation ! --- !
     
-    allocate                   (geo(n_ele,space))
-    allocate         (H(n_ele*space,n_ele*space))
-    allocate         (dervative_b(n_ele*space,1))
-    allocate         (dervative_a(n_ele*space,1))
-    allocate              (conj_s(n_ele*space,1))
-    allocate                     (beta     (1,1))
-    allocate                     (lambda   (1,1))
-    allocate                (Eign  (n_ele*space))
+    allocate(Hconj_s(n_ele*space,1))
+    allocate(geo(n_ele,space))
+    allocate(H(n_ele*space,n_ele*space))
+    allocate(dervative_b(n_ele*space,1))
+    allocate(dervative_a(n_ele*space,1))
+    allocate(conj_s(n_ele*space,1))
+    allocate(Eign(n_ele*space))
 
     
     ! ---- ! dummy variable ! ---- ! 
@@ -189,81 +188,74 @@ program Thomson
     end if
     
     
-    ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
-    ! ---- ! the main loop ! ---- ! 
-    ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
+  ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
+  ! ---- ! the main loop ! ---- ! 
+  ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
     
-    do while (iter < itermax ) 
-     
+  do while (iter < itermax)
+
     iter = iter + 1 
-    
+
     if (norm2(dervative_b) < tol) then 
-    
-      call energy(n_ele,space,geo,Lx,Ly,Lz,E)
-      
-      call hessian(n_ele,space,geo,Lx,Ly,Lz,H)
-      
+      call energy(n_ele, space, geo, Lx, Ly, Lz, E)
+      call hessian(n_ele, space, geo, Lx, Ly, Lz, H)
       write(10,'(a)') ""
-      write(10,'(a,f24.16)') "you are at the minimum, The energy = " , E 
+      write(10,'(a,f24.16)') "you are at the minimum, The energy = ", E
       write(10,'(a)') ""
-      write(10,'(a,E20.10,a)') "and the gradiant normalization = " , norm2(dervative_b), "  smaller than the tolerance"
+      write(10,'(a,E20.10,a)') "and the gradiant normalization = ", norm2(dervative_b), "  smaller than the tolerance"
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
       if (animation == "animation") then 
-        call anim(n_ele,space,geo,E,iter,origin,Lx,Ly,Lz)
+        call anim(n_ele, space, geo, E, iter, origin, Lx, Ly, Lz)
       end if
       exit 
     end if 
     
-    ! ---- ! calculate gradiant matrix ! ---- ! 
-    
-    call diff(n_ele,space,geo,Lx,Ly,Lz,dervative_a)
-    
-    ! --------------------------------------- !
+    call get_grad_hessian(n_ele, space, geo(1,1), Lx, Ly, Lz, &
+                          dervative_a(1,1), H(1,1))
     
     if (norm2(dervative_a) < tol) then
-    
       write(10,'(a)') ""
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
       write(10,'(a,f24.16,a,i5,a)') "Geometry converged at    ",  E ,"   after " ,iter-1  , " Loops"
       write(10,'(a)') ""
-      write(10,'(a,E16.10)') "The gradiant norm  =     ", norm2(dervative_a)
+      write(10,'(a,E17.10)') "The gradiant norm  =     ", norm2(dervative_a)
       write(10,'(a)') "" 
-      
       exit
     end if 
 
-    ! -------------------------------------- !
-    
-    ! ---- ! calculate hessian matrix ! ---- ! 
-    
-    call hessian(n_ele,space,geo,Lx,Ly,Lz,H)
-    
-    ! -------------------------------------- !
     
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
     ! ---- !   conjugated gradiant    ! ---- ! 
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
     
-    beta = matmul(transpose(dervative_a),matmul(H,conj_s))/ matmul(transpose(conj_s),matmul(H,conj_s))
+    call dgemv("N", n_ele*space, n_ele*space, 1.d0, &
+               H(1,1), n_ele*space, conj_s(1,1), 1, &
+               0.d0, Hconj_s(1,1), 1)
 
-    do i=1,n_ele*space
-      conj_s(i,1) =  dervative_a(i,1) + beta(1,1) * conj_s(i,1)
+    beta = matmul(transpose(dervative_a), Hconj_s) &
+         / matmul(transpose(conj_s), Hconj_s)
+    !beta = matmul(transpose(dervative_a), matmul(H, conj_s)) / matmul(transpose(conj_s), matmul(H, conj_s))
+
+    do i = 1, n_ele*space
+      conj_s(i,1) = dervative_a(i,1) + beta(1,1) * conj_s(i,1)
     end do
     
-    lambda = matmul(transpose(dervative_a),dervative_a)/matmul(transpose(conj_s),matmul(H,conj_s))
-    
-    call N_geo(n_ele,space,geo,lambda,conj_s)
-    
-    call PBC(n_ele,space,geo,Lx,Ly,Lz)
+    !lambda = matmul(transpose(dervative_a), dervative_a) / matmul(transpose(conj_s), matmul(H, conj_s))
+    lambda = matmul(transpose(dervative_a), dervative_a) &
+           / matmul(transpose(conj_s), Hconj_s)
+
+    ! TODO
+    call N_geo(n_ele, space, geo, lambda, conj_s)
+    call PBC(n_ele, space, geo, Lx, Ly, Lz)
     
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
     ! ---- !   conjugated gradiant    ! ---- ! 
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
-    
-    call energy(n_ele,space,geo,Lx,Ly,Lz,E)
-          
+
+    call energy(n_ele, space, geo, Lx, Ly, Lz, E)
+
     ! --------------------------------------- !
     
     if (show == "show") then 
@@ -276,7 +268,7 @@ program Thomson
    
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
-      write(10,'(a,f24.16,a,E8.2)') "The energy after optimization =   ",  E , "     |   The derivative =  ", norm2(dervative_a)
+      write(10,'(a,f24.16,a,E9.2)') "The energy after optimization =   ",  E , "     |   The derivative =  ", norm2(dervative_a)
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
     
@@ -290,59 +282,54 @@ program Thomson
       call anim(n_ele,space,geo,E,iter,origin,Lx,Ly,Lz)
     end if
     
-    end do 
+  end do ! while (iter < itermax)
+
     
-    if (show /= "show") then 
-    
-      write(10,'(a)') ""
-      write(10,'(a)') "The final geometry after the optimization:"
-     
-      call print_geo(n_ele,space,geo,10)
-            
-    end if 
+  if (show /= "show") then 
+    write(10,'(a)') ""
+    write(10,'(a)') "The final geometry after the optimization:"
+    call print_geo(n_ele,space,geo,10)
+  end if 
     
     
-    if (hess == "hessian") then
-    
+  if (hess == "hessian") then
     write(10,'(a)') "____________________________________________________________________________________________"
     write(10,'(a)') ""
     write(10,'(a)') "                                  The Hessian matrix after the converge "
     write(10,'(a)') ""
-   
     call matout(n_ele*space,n_ele*space,H,10)
-
-    end if 
+  end if 
     
-    if (distance == "distance") then 
-      call print_distance(n_ele,space,geo,Lx,Ly,Lz,10)
-    end if
+  if (distance == "distance") then 
+    call print_distance(n_ele,space,geo,Lx,Ly,Lz,10)
+  end if
     
-    call diagonalize_matrix(n_ele*space,H,Eign,10)
+  call diagonalize_matrix(n_ele*space,H,Eign,10)
     
-    if (animation == "animation") then 
-      close(4)
-      close(8)
-    end if 
+  if (animation == "animation") then 
+    close(4)
+    close(8)
+  end if 
     
-    if (animation == "animation") then 
-      open (9,file='plot',status = 'replace')
-      call plot_anim(n_ele,space,iter,Lx,Ly,Lz,10)
-      close(9)
-      call system('gnuplot plot')
-      call system('rm -rf plot')
-      call system('rm -rf data_frame.dat')
-      call system('rm -rf energy.dat')
-    end if 
+  if (animation == "animation") then 
+    open (9,file='plot',status = 'replace')
+    call plot_anim(n_ele,space,iter,Lx,Ly,Lz,10)
+    close(9)
+    call system('gnuplot plot')
+    call system('rm -rf plot')
+    call system('rm -rf data_frame.dat')
+    call system('rm -rf energy.dat')
+  end if 
   
   
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       
-      call system('rm -rf fort.1')
-      call system('rm -rf fort.3')
-      call system('rm -rf fort.4')
-      call system('rm -rf fort.8')
-      call system('rm -rf fort.5')
-      call system('rm -rf functions.mod')
+  call system('rm -rf fort.1')
+  call system('rm -rf fort.3')
+  call system('rm -rf fort.4')
+  call system('rm -rf fort.8')
+  call system('rm -rf fort.5')
+  call system('rm -rf functions.mod')
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
@@ -368,5 +355,8 @@ program Thomson
 #ifdef USE_MPI
   call MPI_Finalize(ierr)
 #endif
+
+
+  deallocate(Hconj_s, geo, H, dervative_b, dervative_a, conj_s, Eign)
 
 end program
