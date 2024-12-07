@@ -121,7 +121,6 @@ program Thomson
     
     call first_geo(arg,n_ele,space,Lx,Ly,Lz,typ,multi,geo,nlines)
 
-
 #ifdef USE_MPI
     write(Ncore,'(I2)') ME
     open(10,file='rand_'//Ncore//'.out')
