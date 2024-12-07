@@ -17,6 +17,7 @@ program Thomson
   
  ! ----  dp  ---- !
  
+ double precision                 :: tt1, tt2, tt3, tt4
  double precision                 :: Lx , Ly , Lz 
  double precision                 :: tol
  double precision                 :: E  
@@ -139,9 +140,17 @@ program Thomson
    
     call print_geo(n_ele,space,geo,10)
     
+    print*, ' start energy calc:'
+    call wall_time(tt1)
     call energy(n_ele,space,geo,Lx,Ly,Lz,E)
+    call wall_time(tt2)
+    print*, ' done after ', tt2 - tt1
     
+    print*, ' start gradient calc:'
+    call wall_time(tt1)
     call diff(n_ele,space,geo,Lx,Ly,Lz,dervative_b)
+    call wall_time(tt2)
+    print*, ' done after ', tt2 - tt1
       
     conj_s(:,1) =  dervative_b(:,1)
     
@@ -197,11 +206,15 @@ program Thomson
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
     
     do while (iter < itermax ) 
+
+      print*, 'start while loop:'
+      call wall_time(tt1)
      
     iter = iter + 1 
     
     if (norm2(dervative_b) < tol) then 
     
+      print*, ' norm2(dervative_b) < tol '
       call energy(n_ele,space,geo,Lx,Ly,Lz,E)
       
       call hessian(n_ele,space,geo,Lx,Ly,Lz,H)
@@ -220,18 +233,24 @@ program Thomson
     
     ! ---- ! calculate gradiant matrix ! ---- ! 
     
+    print*, ' start gradient calc:'
+    call wall_time(tt3)
     call diff(n_ele,space,geo,Lx,Ly,Lz,dervative_a)
+    call wall_time(tt4)
+    print*, 'end after = ', tt4 - tt3
     
     ! --------------------------------------- !
     
     if (norm2(dervative_a) < tol) then
-    
+
+      print*, " norm2(dervative_a) < tol "    
+
       write(10,'(a)') ""
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
       write(10,'(a,f24.16,a,i5,a)') "Geometry converged at    ",  E ,"   after " ,iter-1  , " Loops"
       write(10,'(a)') ""
-      write(10,'(a,E16.10)') "The gradiant norm  =     ", norm2(dervative_a)
+      write(10,'(a,E17.10)') "The gradiant norm  =     ", norm2(dervative_a)
       write(10,'(a)') "" 
       
       exit
@@ -241,7 +260,11 @@ program Thomson
     
     ! ---- ! calculate hessian matrix ! ---- ! 
     
+    print*, ' start Hessian calc:'
+    call wall_time(tt3)
     call hessian(n_ele,space,geo,Lx,Ly,Lz,H)
+    call wall_time(tt4)
+    print*, 'end after = ', tt4 - tt3
     
     ! -------------------------------------- !
     
@@ -249,6 +272,8 @@ program Thomson
     ! ---- !   conjugated gradiant    ! ---- ! 
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
     
+    print*, ' start conjugated gradiant calc:'
+    call wall_time(tt3)
     beta = matmul(transpose(dervative_a),matmul(H,conj_s))/ matmul(transpose(conj_s),matmul(H,conj_s))
 
     do i=1,n_ele*space
@@ -260,6 +285,9 @@ program Thomson
     call N_geo(n_ele,space,geo,lambda,conj_s)
     
     call PBC(n_ele,space,geo,Lx,Ly,Lz)
+
+    call wall_time(tt4)
+    print*, 'end after = ', tt4 - tt3
     
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
     ! ---- !   conjugated gradiant    ! ---- ! 
@@ -279,7 +307,7 @@ program Thomson
    
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
-      write(10,'(a,f24.16,a,E8.2)') "The energy after optimization =   ",  E , "     |   The derivative =  ", norm2(dervative_a)
+      write(10,'(a,f24.16,a,E9.2)') "The energy after optimization =   ",  E , "     |   The derivative =  ", norm2(dervative_a)
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
     
@@ -293,6 +321,9 @@ program Thomson
       call anim(n_ele,space,geo,E,iter,origin,Lx,Ly,Lz)
     end if
     
+      call wall_time(tt2)
+      print*, 'wall time for one iter (sec) = ', tt2 - tt1
+      stop
     end do 
     
     if (show /= "show") then 

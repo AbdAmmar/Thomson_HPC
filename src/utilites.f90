@@ -1073,3 +1073,19 @@ subroutine matout(m,n,A,file_index)
   enddo
 
 end subroutine matout
+
+! ---
+
+subroutine wall_time(t)
+  implicit none
+  double precision, intent(out)  :: t
+  integer*8                        :: c
+  integer*8, save                  :: rate = 0
+  if (rate == 0) then
+    CALL SYSTEM_CLOCK(count_rate=rate)
+  end if
+  CALL SYSTEM_CLOCK(count=c)
+  t = dble(c)/dble(rate)
+end subroutine
+
+
