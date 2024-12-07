@@ -32,7 +32,8 @@ program Thomson
  
  ! ----  ch  ---- !
  
- character (len = 20 )           :: arg , typ , multi 
+ character (len = 50 )           :: arg
+ character (len = 20 )           :: typ , multi 
  character (len = 20 )           :: show , hess , distance , animation
  character (len = 20 )           :: origin 
 !-----------------------------------------------------------------------------------!
@@ -74,6 +75,12 @@ program Thomson
     ! ----- Read from input file  ----- !
   
     call read_f(arg,space,n_ele,tol,itermax,Lx,Ly,Lz,typ,multi,show,hess,distance,animation,origin,nlines)
+    !print*, " space,n_ele,tol,itermax=", space,n_ele,tol,itermax
+    !print*, " Lx,Ly,Lz=", Lx,Ly,Lz
+    !print*, " typ,multi,show,hess=", typ,multi,show,hess
+    !print*, " distance,animation,origin=", distance,animation,origin
+    !print*, " nlines=", nlines
+    !stop
     
   end if 
   
@@ -108,6 +115,7 @@ program Thomson
     allocate                     (lambda   (1,1))
     allocate                (Eign  (n_ele*space))
 
+
     
     ! ---- ! dummy variable ! ---- ! 
     
@@ -119,6 +127,7 @@ program Thomson
     
     call first_geo(arg,n_ele,space,Lx,Ly,Lz,typ,multi,geo,nlines)
 
+
 #ifdef USE_MPI
     write(Ncore,'(I2)') ME
     open(10,file='rand_'//Ncore//'.out')
@@ -129,6 +138,7 @@ program Thomson
     ! ----- The Title ----- !
     
     call title(n_ele,space,itermax,typ,Lx,Ly,Lz,10)
+
     
     write(10,*) ""
     write(10,'(a)') "                                       ((  The starting Geometry  ))  "

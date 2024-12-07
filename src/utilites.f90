@@ -4,7 +4,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
   
   ! ---- ! input  ! ---- ! 
   
-  character (len = 20 ) , intent(in)         :: arg 
+  character (len = 50 ) , intent(in)         :: arg 
   
   ! ---- ! local  ! ---- !  
   
@@ -30,6 +30,14 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
   character (len = 20 ), intent(out)         :: or
   
   ! ---- ! code  ! ---- !
+
+  ra = "" 
+  mu = ""
+  sh = ""
+  he = ""
+  de = ""
+  an = ""
+  or = ""
   
   ! ---- ! initalize ! ---- ! 
   
@@ -62,35 +70,38 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
   
   open (1,file = arg)
     do i=1,nlines
-    read (1,*,end=2) boxa
-    if (boxa .EQ. boxb) then
-      backspace (1)
-      read  (1,*) boxa , Lx , Ly ,Lz
-      close(1)
-    end if 
-  end do
+      read (1,*,end=2) boxa
+      if (boxa .EQ. boxb) then
+        backspace (1)
+        read  (1,*) boxa , Lx , Ly ,Lz
+        close(1)
+        exit
+      end if 
+    end do
   2 close(1)
 
 
   
   open (1,file = arg)
     do i=1,nlines
-    read (1,*,end = 3) ranaa
+      read (1,*,end = 3) ranaa
       if (ranaa .EQ. ranab) then
-      backspace (1)
-      read  (1,*) ra
-      close(1)
+        backspace (1)
+        read  (1,*) ra
+        close(1)
+        exit
       end if 
     end do 
   3 close(1)
   
   open (1,file = arg)
     do i=1,nlines
-    read (1,*,end=4) multia
+      read (1,*,end=4) multia
       if (multia .EQ. multib) then
         backspace (1)
         read  (1,*) mu
         close(1)
+        exit
       end if 
     end do 
   4 close(1)
@@ -102,6 +113,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
         backspace (1)
         read  (1,*) sh
         close(1)
+        exit
       end if 
     end do 
   5 close(1)
@@ -113,10 +125,11 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
         backspace (1)
         read  (1,*) dn , rect
         close(1)
+        exit
       end if 
     end do 
   6 close(1)
-  
+ 
   if (dn == "density" .and. boxa /= "box") then 
   
     select case (D) 
@@ -156,6 +169,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
         backspace (1)
         read  (1,*) he
         close(1)
+        exit
       end if 
     end do 
   7 close(1)
@@ -167,6 +181,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
         backspace (1)
         read  (1,*) de
         close(1)
+        exit
       end if 
     end do 
   8 close(1)
@@ -178,6 +193,7 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
         backspace (1)
         read  (1,*) an , or
         close(1)
+        exit
       end if 
     end do 
   9 close(1)
@@ -288,7 +304,8 @@ subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo,nlines)
   
   integer              , intent(in)          :: N  , D 
   double precision     , intent(in)          :: Lx , Ly , Lz 
-  character (len = 20 ), intent(in)          :: arg , mu , ra
+  character (len = 50 ), intent(in)          :: arg
+  character (len = 20 ), intent(in)          :: mu , ra
   integer              , intent(in)          :: nlines 
   
   ! ---- ! local  ! ---- !  
@@ -316,29 +333,29 @@ subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo,nlines)
         
   do i=1,nlines
     read (5,*,end=2) geoa
-      if (geoa .EQ. geob) then
-        backspace (5)
-        read  (5,*) geoa
-          do k = 1,N
-            if      (D == 3) then 
-                read  (5,*)  null , geo(k,1) , geo(k,2) , geo(k,3)   
-            else if (D == 2) then 
-                read  (5,*)  null , geo(k,1) , geo(k,2)
-            else if (D == 1) then
-                read  (5,*)  null , geo(k,1) 
-            end if 
-          end do 
-          close(5)
-      end if 
+    if (geoa .EQ. geob) then
+      backspace (5)
+      read  (5,*) geoa
+      do k = 1,N
+        if      (D == 3) then 
+            read  (5,*)  null , geo(k,1) , geo(k,2) , geo(k,3)   
+        else if (D == 2) then 
+            read  (5,*)  null , geo(k,1) , geo(k,2)
+        else if (D == 1) then
+            read  (5,*)  null , geo(k,1) 
+        end if 
+      end do 
+      close(5)
+      exit
+    end if 
   end do
     
-  2 close (1)
+  2 close (5)
   
   end if 
   
-  
   if (mu == "multiply") then 
-      
+
       if      (D == 3) then 
       
       geo(:,1) = geo(:,1)* Lx 
@@ -357,7 +374,6 @@ subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo,nlines)
       end if 
       
   end if 
-
 
 end subroutine
 
