@@ -75,12 +75,6 @@ program Thomson
     ! ----- Read from input file  ----- !
   
     call read_f(arg,space,n_ele,tol,itermax,Lx,Ly,Lz,typ,multi,show,hess,distance,animation,origin,nlines)
-    !print*, " space,n_ele,tol,itermax=", space,n_ele,tol,itermax
-    !print*, " Lx,Ly,Lz=", Lx,Ly,Lz
-    !print*, " typ,multi,show,hess=", typ,multi,show,hess
-    !print*, " distance,animation,origin=", distance,animation,origin
-    !print*, " nlines=", nlines
-    !stop
     
   end if 
   
