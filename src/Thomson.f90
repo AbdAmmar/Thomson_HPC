@@ -17,6 +17,7 @@ program Thomson
   
  ! ----  dp  ---- !
  
+ double precision                 :: tt1, tt2, tt3, tt4
  double precision                 :: Lx, Ly, Lz 
  double precision                 :: tol
  double precision                 :: E  
@@ -120,7 +121,6 @@ program Thomson
     
     call first_geo(arg,n_ele,space,Lx,Ly,Lz,typ,multi,geo,nlines)
 
-
 #ifdef USE_MPI
     write(Ncore,'(I2)') ME
     open(10,file='rand_'//Ncore//'.out')
@@ -139,9 +139,17 @@ program Thomson
    
     call print_geo(n_ele,space,geo,10)
     
+    print*, ' start energy calc:'
+    call wall_time(tt1)
     call energy(n_ele,space,geo,Lx,Ly,Lz,E)
+    call wall_time(tt2)
+    print*, ' done after ', tt2 - tt1
     
+    print*, ' start gradient calc:'
+    call wall_time(tt1)
     call diff(n_ele,space,geo,Lx,Ly,Lz,dervative_b)
+    call wall_time(tt2)
+    print*, ' done after ', tt2 - tt1
       
     conj_s(:,1) =  dervative_b(:,1)
     
@@ -196,13 +204,16 @@ program Thomson
   ! ---- ! the main loop ! ---- ! 
   ! %%%%%%%%%%%%%%%%%%%%%%%%%%% !
     
-  do while (iter < itermax)
+  do while (iter < itermax ) 
 
+    print*, 'start while loop:'
+    call wall_time(tt1)
+     
     iter = iter + 1 
 
     if (norm2(dervative_b) < tol) then 
-      call energy(n_ele, space, geo, Lx, Ly, Lz, E)
-      call hessian(n_ele, space, geo, Lx, Ly, Lz, H)
+      call energy(n_ele,space,geo,Lx,Ly,Lz,E)
+      call hessian(n_ele,space,geo,Lx,Ly,Lz,H)
       write(10,'(a)') ""
       write(10,'(a,f24.16)') "you are at the minimum, The energy = ", E
       write(10,'(a)') ""
@@ -215,8 +226,12 @@ program Thomson
       exit 
     end if 
     
+    print*, ' start gradient and hessian calc:'
+    call wall_time(tt3)
     call get_grad_hessian(n_ele, space, geo(1,1), Lx, Ly, Lz, &
                           dervative_a(1,1), H(1,1))
+    call wall_time(tt4)
+    print*, 'end after = ', tt4 - tt3
     
     if (norm2(dervative_a) < tol) then
       write(10,'(a)') ""
@@ -233,6 +248,9 @@ program Thomson
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
     ! ---- !   conjugated gradiant    ! ---- ! 
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
+
+    print*, ' start conjugated gradiant calc:'
+    call wall_time(tt3)
     
     call dgemv("N", n_ele*space, n_ele*space, 1.d0, &
                H(1,1), n_ele*space, conj_s(1,1), 1, &
@@ -240,23 +258,25 @@ program Thomson
 
     beta = matmul(transpose(dervative_a), Hconj_s) &
          / matmul(transpose(conj_s), Hconj_s)
-    !beta = matmul(transpose(dervative_a), matmul(H, conj_s)) / matmul(transpose(conj_s), matmul(H, conj_s))
 
     do i = 1, n_ele*space
       conj_s(i,1) = dervative_a(i,1) + beta(1,1) * conj_s(i,1)
     end do
     
-    !lambda = matmul(transpose(dervative_a), dervative_a) / matmul(transpose(conj_s), matmul(H, conj_s))
     lambda = matmul(transpose(dervative_a), dervative_a) &
            / matmul(transpose(conj_s), Hconj_s)
 
     ! TODO
     call N_geo(n_ele, space, geo, lambda, conj_s)
     call PBC(n_ele, space, geo, Lx, Ly, Lz)
+
+    call wall_time(tt4)
+    print*, 'end after = ', tt4 - tt3
     
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
     ! ---- !   conjugated gradiant    ! ---- ! 
     ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% !
+
 
     call energy(n_ele, space, geo, Lx, Ly, Lz, E)
 
@@ -286,8 +306,19 @@ program Thomson
       call anim(n_ele,space,geo,E,iter,origin,Lx,Ly,Lz)
     end if
     
-  end do ! while (iter < itermax)
-
+      call wall_time(tt2)
+      print*, 'wall time for one iter (sec) = ', tt2 - tt1
+      stop
+    end do ! while (iter < itermax)
+    
+    if (show /= "show") then 
+    
+      write(10,'(a)') ""
+      write(10,'(a)') "The final geometry after the optimization:"
+     
+      call print_geo(n_ele,space,geo,10)
+            
+    end if 
     
   if (show /= "show") then 
     write(10,'(a)') ""
