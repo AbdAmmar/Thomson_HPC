@@ -9,7 +9,7 @@ program Thomson
  
  ! ----   i  ---- ! 
  
- integer                          :: i 
+ integer                          :: i, j, m, n
  integer                          :: n_ele
  integer                          :: space 
  integer                          :: nlines
@@ -30,6 +30,7 @@ program Thomson
  double precision, allocatable    :: conj_s(:,:)
  double precision, allocatable    :: H(:,:)
  double precision, allocatable    :: Hconj_s(:,:)
+ double precision, allocatable    :: H_t(:,:,:,:), dervative_a_t(:,:,:)
 
  ! ----  ch  ---- !
  
@@ -109,6 +110,8 @@ program Thomson
     allocate(conj_s(n_ele*space,1))
     allocate(Eign(n_ele*space))
 
+    allocate(dervative_a_t(space,n_ele,1))
+    allocate(H_t(space,space,n_ele,n_ele))
 
     
     ! ---- ! dummy variable ! ---- ! 
@@ -225,13 +228,26 @@ program Thomson
       end if
       exit 
     end if 
-    
+
+
     print*, ' start gradient and hessian calc:'
     call wall_time(tt3)
     call get_grad_hessian(n_ele, space, geo(1,1), Lx, Ly, Lz, &
-                          dervative_a(1,1), H(1,1))
+                          dervative_a_t(1,1,1), H_t(1,1,1,1))
     call wall_time(tt4)
     print*, 'end after = ', tt4 - tt3
+    do i = 1, n_ele
+      do m = 1, space
+        dervative_a(i+(m-1)*n_ele,1) = dervative_a_t(m,i,1)
+      enddo
+      do j = 1, n_ele
+        do m = 1, space
+          do n = 1, space
+            H(j+(n-1)*n_ele,i+(m-1)*n_ele) = H_t(n,m,j,i)
+          enddo
+        enddo
+      enddo
+    enddo
     
     if (norm2(dervative_a) < tol) then
       write(10,'(a)') ""
