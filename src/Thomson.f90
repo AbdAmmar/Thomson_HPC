@@ -133,9 +133,7 @@ program Thomson
 
     ! ----- The Title ----- !
 
-    print*, ' Lx = ', Lx
     call title(n_ele,space,itermax,typ,Lx,Ly,Lz,10)
-    stop
 
     
     write(10,*) ""
@@ -152,19 +150,25 @@ program Thomson
     
     print*, ' start gradient calc:'
     call wall_time(tt1)
-    call diff(n_ele,space,geo,Lx,Ly,Lz,dervative_b)
+    call diff(n_ele, space, geo(1,1), Lx, Ly, Lz, dervative_a_t(1,1,1))
     call wall_time(tt2)
     print*, ' done after ', tt2 - tt1
-      
-    conj_s(:,1) =  dervative_b(:,1)
-    
+    do i = 1, n_ele
+      do m = 1, space
+        dervative_b(i+(m-1)*n_ele,1) = dervative_a_t(m,i,1)
+      enddo
+      write(220,"(3(F15.7, 1x))") (geo(i,m), m = 1, space)
+      write(221,"(3(F15.7, 1x))") (dervative_b(i+(m-1)*n_ele,1), m = 1, space)
+    enddo
+
+    conj_s(:,1) = dervative_b(:,1)
+
     ! --------- ! condition if NAN or fall ! -------- ! 
-    
     if (isnan(Norm2(dervative_b)) .or. Norm2(dervative_b) > 1e20) then
       write(10,'(a)') "____________________________________________________________________________________________"
       write(10,'(a)') ""
       write(10,'(a)') "you have 2 or more electron at the same position or the energy is infinity"
-      Stop
+      stop
     end if
     
     ! --------- !                        ! ----------- !
@@ -179,19 +183,14 @@ program Thomson
     
     ! ----- ! condition for  only one calculation ! ---- !  
     
-    if (itermax == 0 ) then 
-
+    if (itermax == 0) then
       call hessian(n_ele,space,geo,Lx,Ly,Lz,H)
-     
-    end if 
-    
-    
+    end if
+
     if (show /= "show" .and. norm2(dervative_b) > tol) then 
-    
       write(10,'(a)') ' Loop   |          Energy           |      Gradient NORM '
       write(10,'(a)') "_______________________________________________________________"
       write(10,'(a)') ""
-      
     end if 
     
     if (animation == "animation") then 
@@ -326,7 +325,7 @@ program Thomson
     
       call wall_time(tt2)
       print*, 'wall time for one iter (sec) = ', tt2 - tt1
-      stop
+      !stop
     end do ! while (iter < itermax)
     
     if (show /= "show") then 

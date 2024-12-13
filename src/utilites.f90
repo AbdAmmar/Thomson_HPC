@@ -297,94 +297,89 @@ write(file_index,'(a)') ""
 
 end subroutine
 
-subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo,nlines)
+! ---
+
+subroutine first_geo(arg, N, D, Lx, Ly, Lz, ra, mu, geo, nlines)
       
   implicit none 
 
   ! ---- ! input  ! ---- ! 
   
-  integer              , intent(in)          :: N  , D 
-  double precision     , intent(in)          :: Lx , Ly , Lz 
-  character (len = 50 ), intent(in)          :: arg
-  character (len = 20 ), intent(in)          :: mu , ra
-  integer              , intent(in)          :: nlines 
+  integer             , intent(in)  :: N, D
+  double precision    , intent(in)  :: Lx, Ly, Lz
+  character (len = 50), intent(in)  :: arg
+  character (len = 20), intent(in)  :: mu, ra
+  integer             , intent(in)  :: nlines
+  double precision    , intent(out) :: geo(N,D)
   
-  ! ---- ! local  ! ---- !  
 
-  integer                                    :: i , k 
-  integer                                    :: null 
-  character (len = 10 )                      :: geob , geoa
-  
-  
-  ! ---- ! output ! ---- !  
-  
-  double precision      , intent(out)        :: geo(N,D)
-  
-  ! ---- ! code  ! ---- !
-    
-    
-      
+  integer                            :: i, k
+  integer                            :: nul
+  integer                            :: seed_size
+  character(len = 10)                :: geob, geoa
+  integer, allocatable               :: seed(:)
+
+
+  geo = 0.d0
+
   ! Set a specific seed (for reproducibility)
-  integer, allocatable :: seed(:)
-  integer :: seed_size
   call random_seed(size=seed_size)
   allocate(seed(seed_size))
   seed = 12345
   call random_seed(put=seed)
-
   if (ra == "random") then 
     call random_number(geo)
   else
   
-  geob   = "geometry"  
-  
-  open (5,file = arg)
-        
-  do i=1,nlines
-    read (5,*,end=2) geoa
-    if (geoa .EQ. geob) then
-      backspace (5)
-      read  (5,*) geoa
-      do k = 1,N
-        if      (D == 3) then 
-            read  (5,*)  null , geo(k,1) , geo(k,2) , geo(k,3)   
-        else if (D == 2) then 
-            read  (5,*)  null , geo(k,1) , geo(k,2)
-        else if (D == 1) then
-            read  (5,*)  null , geo(k,1) 
-        end if 
-      end do 
-      close(5)
-      exit
-    end if 
-  end do
-    
+  geob = "geometry"  
+
+  open (5, file = arg)
+    do i = 1, nlines
+      read (5, *, end=2) geoa
+      if (geoa .EQ. geob) then
+        backspace(5)
+        read(5,*) geoa
+        do k = 1, N
+          if(D == 3) then 
+            read(5,*) nul, geo(k,1), geo(k,2), geo(k,3)
+          else if (D == 2) then
+            read(5,*) nul, geo(k,1), geo(k,2)
+          else if (D == 1) then
+            read(5,*) nul, geo(k,1)
+          endif
+        end do
+        close(5)
+        exit
+      end if
+    end do
   2 close (5)
   
   end if 
   
+
   if (mu == "multiply") then 
 
-      if      (D == 3) then 
-      
-      geo(:,1) = geo(:,1)* Lx 
-      geo(:,2) = geo(:,2)* Ly
-      geo(:,3) = geo(:,3)* Lz
-      
-      else if (D == 2) then 
-      
-      geo(:,1) = geo(:,1)* Lx 
-      geo(:,2) = geo(:,2)* Ly
-      
-      else if (D == 1) then
-      
-      geo(:,1) = geo(:,1)* Lx
-      
-      end if 
-      
-  end if 
+    if(D == 3) then 
+
+      geo(:,1) = geo(:,1) * Lx 
+      geo(:,2) = geo(:,2) * Ly
+      geo(:,3) = geo(:,3) * Lz
+
+    else if (D == 2) then 
+
+      geo(:,1) = geo(:,1) * Lx 
+      geo(:,2) = geo(:,2) * Ly
+
+    else if (D == 1) then
+
+      geo(:,1) = geo(:,1) * Lx
+
+    endif
+  endif
 
 end subroutine
+
+! ---
 
 subroutine print_geo(N,D,geo,file_index)
 

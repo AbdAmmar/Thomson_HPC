@@ -6,7 +6,7 @@ MPI_FLAGS = -DUSE_MPI
 FFFLAGS = -Wall -g -avx512 -fcheck=all -Waliasing -Wampersand -Wconversion -Wsurprising -Wintrinsics-std -Wno-tabs -Wintrinsic-shadow -Wline-truncation -Wreal-q-constant
 
 #FFLAGS = -Wall -Wno-unused -Wno-unused-dummy-argument -O3 -fallow-argument-mismatch -g -mcpu=native -funroll-loops -cpp
-FFLAGS = -O3 -march=native -fpp
+FFLAGS = -O2 -march=native -fpp
 
 SRC_DIR = src
 INC_DIR = include
