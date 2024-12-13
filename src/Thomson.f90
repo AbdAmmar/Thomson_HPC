@@ -62,7 +62,7 @@ program Thomson
   
   if (ME == 0) then
   
-  call system('clear')
+  !call system('clear')
   if(command_argument_count().eq.0) then
     write(*,'(a)')
     write(*,'(a)') "Sorry, you didn't add the input file"
@@ -132,8 +132,10 @@ program Thomson
 #endif
 
     ! ----- The Title ----- !
-    
+
+    print*, ' Lx = ', Lx
     call title(n_ele,space,itermax,typ,Lx,Ly,Lz,10)
+    stop
 
     
     write(10,*) ""

@@ -198,9 +198,10 @@ subroutine read_f(arg,D,N,tol,iter,Lx,Ly,Lz,ra,mu,sh,he,de,an,or,nlines)
     end do 
   9 close(1)
   
-  
-  
+  return
 end subroutine
+
+! ---
 
 subroutine title(N,space,iter,geo_typ,Lx,Ly,Lz,file_index)
 
@@ -208,14 +209,14 @@ subroutine title(N,space,iter,geo_typ,Lx,Ly,Lz,file_index)
   
   ! ---- ! input  ! ---- ! 
   
-  integer              , intent(in)          :: N , space , iter
+  integer              , intent(in)          :: N, space, iter
   integer              , intent(in)          :: file_index
-  double precision     , intent(in)          :: Lx , Ly , Lz 
+  double precision     , intent(in)          :: Lx, Ly, Lz 
   character (len = 10 ), intent(in)          :: geo_typ
   
   ! ---- ! local  ! ---- !  
   
-  double precision , parameter               :: pi = acos(-1.0d0)
+  double precision , parameter               :: pi = dacos(-1.0d0)
   double precision                           :: LLx , LLy , LLz 
   
   ! ---- ! output ! ---- !  
@@ -225,9 +226,9 @@ subroutine title(N,space,iter,geo_typ,Lx,Ly,Lz,file_index)
   
   ! ---- ! code  ! ---- !
 
-  LLx = Lx/(2*pi)
-  LLy = Ly/(2*pi)
-  LLz = Lz/(2*pi)
+  LLx = Lx/(2.d0*pi)
+  LLy = Ly/(2.d0*pi)
+  LLz = Lz/(2.d0*pi)
   
 write(file_index,'(a)') ""
 write(file_index,'(a)') "   _____ _                                                       _     _ "
@@ -261,12 +262,12 @@ write(file_index,'(a)') ""
 
 if (  geo_typ == "random" ) then
 
-  write(file_index,'(a,i4,a,i1,a,i7,a,a)') "The calculation for " , N ,"  electron in " , space   &
+  write(file_index,'(a,i7,a,i1,a,i7,a,a)') "The calculation for " , N ,"  electron in " , space   &
                                  ,"D dimension , with ", iter , " loops and random geometry"
 
 else
 
-  write(file_index,'(a,i4,a,i1,a,i7,a,a)') "The calculation for " , N ,"  electron in " , space   &
+  write(file_index,'(a,i7,a,i1,a,i7,a,a)') "The calculation for " , N ,"  electron in " , space   &
                                  ,"D dimension , with ", iter , " loops and spacific geometry"
 
 end if
@@ -279,7 +280,7 @@ write(file_index,'(a,f14.12,a,f14.12)') "      Pi = " , pi , "       2 Pi = " , 
 write(file_index,'(a)') ""
 write(file_index,'(a)') "                   ||  The size of the box  ||"
 write(file_index,'(a)') ""
-write(file_index,'(a,f14.12,a,f14.12,a,f14.12,a)') "       X = " , Lx ,"          Y = " , Ly , "          Z = " , Lz
+write(file_index,'(a,f19.12,a,f19.12,a,f19.12,a)') "       X = " , Lx ,"          Y = " , Ly , "          Z = " , Lz
 write(file_index,'(a)') ""
 write(file_index,'(a)') "                   ||  The ratio between 2 pi and the lengths of the box  ||"
 write(file_index,'(a)') ""
@@ -323,6 +324,14 @@ subroutine first_geo(arg,N,D,Lx,Ly,Lz,ra,mu,geo,nlines)
     
     
       
+  ! Set a specific seed (for reproducibility)
+  integer, allocatable :: seed(:)
+  integer :: seed_size
+  call random_seed(size=seed_size)
+  allocate(seed(seed_size))
+  seed = 12345
+  call random_seed(put=seed)
+
   if (ra == "random") then 
     call random_number(geo)
   else
